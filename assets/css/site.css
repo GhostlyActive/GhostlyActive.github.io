@@ -306,6 +306,15 @@
   margin-bottom: var(--space-6);
 }
 
+/* On a phone the hero costs a screen and a half before the first project. The
+   facts list directly below already names the engines and the boards, so that
+   sentence is the one that can go. */
+@media (max-width: 46rem) {
+  .hero__lede-detail {
+    display: none;
+  }
+}
+
 .hero__actions {
   display: flex;
   flex-wrap: wrap;

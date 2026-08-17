@@ -230,19 +230,91 @@
     const CENTRE = MAP / 2;
     const PATH_RADIUS = 9.5;
     const FAR = 17;
+    const TEX = 32;
+    const TEX_MASK = TEX - 1;
+    const FOG = [12, 12, 15];
 
     const world = new Uint8Array(MAP * MAP);
     const buffer = createPixelBuffer(3);
 
-    const walls = [
-      [0, 0, 0],
-      [224, 147, 52],
-      [80, 86, 100],
-      [152, 127, 102],
-    ];
-
     let ceiling = null;
-    let floor = null;
+
+    /**
+     * Four 32×32 surfaces built from arithmetic — an amber panel, slate brick,
+     * a blue plate carrying a magenta light strip, and the floor tiling. The
+     * blue and the magenta are the logo's colours; they are the only place on
+     * the site outside the mark that is not amber.
+     */
+    function buildTextures() {
+      const noise = seeded(0x77a11);
+      const surfaces = [];
+
+      for (let id = 0; id < 4; id += 1) {
+        const texels = new Uint32Array(TEX * TEX);
+
+        for (let y = 0; y < TEX; y += 1) {
+          for (let x = 0; x < TEX; x += 1) {
+            const grain = 0.9 + noise() * 0.2;
+            let r;
+            let g;
+            let b;
+
+            if (id === 0) {
+              // Amber panel: horizontal seams with a rivet at each end.
+              const seam = y % 11 === 0;
+              const rivet = seam && (x % 11 === 3 || x % 11 === 8);
+              r = rivet ? 255 : seam ? 96 : 168;
+              g = rivet ? 190 : seam ? 60 : 108;
+              b = rivet ? 96 : seam ? 22 : 40;
+            } else if (id === 1) {
+              // Slate brick, every other course offset by half a brick.
+              const course = (y / 8) | 0;
+              const shifted = course % 2 === 0 ? x : (x + 16) & TEX_MASK;
+              const mortar = y % 8 === 0 || shifted % 16 === 0;
+              r = mortar ? 34 : 74;
+              g = mortar ? 37 : 80;
+              b = mortar ? 44 : 94;
+            } else if (id === 2) {
+              // Blue plate with a lit strip down the middle.
+              const strip = x > 13 && x < 18;
+              const band = y % 16 < 2;
+              r = strip ? 255 : band ? 20 : 32;
+              g = strip ? 74 : band ? 26 : 42;
+              b = strip ? 190 : band ? 74 : 104;
+            } else {
+              // Floor: square tiles with a lighter grout line.
+              const grout = x % 16 === 0 || y % 16 === 0;
+              r = grout ? 58 : 34;
+              g = grout ? 52 : 31;
+              b = grout ? 48 : 34;
+            }
+
+            texels[y * TEX + x] = pack(r * grain, g * grain, b * grain);
+          }
+        }
+
+        surfaces.push(texels);
+      }
+
+      return surfaces;
+    }
+
+    const textures = buildTextures();
+
+    /** Y-facing walls are drawn from a pre-darkened copy — the original's
+        stand-in for lighting, paid for once instead of per pixel. */
+    const shaded = textures.map((texels) => {
+      const copy = new Uint32Array(texels.length);
+      for (let i = 0; i < texels.length; i += 1) {
+        const value = texels[i];
+        copy[i] = pack(
+          (value & 0xff) * 0.62,
+          ((value >> 8) & 0xff) * 0.62,
+          ((value >> 16) & 0xff) * 0.62,
+        );
+      }
+      return copy;
+    });
 
     const random = seeded(0xbadc0de);
     for (let y = 0; y < MAP; y += 1) {
@@ -253,7 +325,16 @@
         // The camera circles at PATH_RADIUS, so that band is kept clear and no
         // collision test is needed — everything else is free to be a pillar.
         const onPath = Math.abs(radius - PATH_RADIUS) < 1.6;
-        world[y * MAP + x] = edge ? 2 : !onPath && random() < 0.17 ? 1 + ((random() * 3) | 0) : 0;
+        const kind = random();
+        world[y * MAP + x] = edge
+          ? 2
+          : !onPath && random() < 0.17
+            ? kind < 0.45
+              ? 1
+              : kind < 0.85
+                ? 2
+                : 3
+            : 0;
       }
     }
 
@@ -262,14 +343,9 @@
 
       const horizon = buffer.height * 0.52;
       ceiling = new Uint32Array(buffer.height);
-      floor = new Uint32Array(buffer.height);
-
       for (let y = 0; y < buffer.height; y += 1) {
         const up = clamp(y / horizon, 0, 1);
-        ceiling[y] = pack(mix(9, 33, up), mix(9, 31, up), mix(11, 38, up));
-
-        const down = clamp((y - horizon) / (buffer.height - horizon), 0, 1);
-        floor[y] = pack(mix(30, 74, down), mix(28, 62, down), mix(32, 52, down));
+        ceiling[y] = pack(mix(9, 30, up), mix(9, 28, up), mix(11, 35, up));
       }
     }
 
@@ -292,6 +368,49 @@
       const dirY = Math.sin(angle);
       const planeX = -dirY * 0.66;
       const planeY = dirX * 0.66;
+
+      for (let y = 0; y < horizon && y < bufferHeight; y += 1) {
+        pixels.fill(ceiling[y], y * bufferWidth, y * bufferWidth + bufferWidth);
+      }
+
+      // Floor casting: every row below the horizon is one distance, so the tile
+      // it lands on can be walked across the row with a single addition. The
+      // walls are drawn over the top afterwards.
+      const tiles = textures[3];
+      const leftX = dirX - planeX;
+      const leftY = dirY - planeY;
+      const spanX = ((dirX + planeX) - leftX) / bufferWidth;
+      const spanY = ((dirY + planeY) - leftY) / bufferWidth;
+
+      for (let y = Math.max(horizon, 0); y < bufferHeight; y += 1) {
+        const depth = y - horizon + 1;
+        const rowDistance = (projection * 0.5) / depth;
+        const haze = clamp(rowDistance / FAR, 0, 1) ** 1.2;
+        const keep = 1 - haze;
+        const fogR = FOG[0] * haze;
+        const fogG = FOG[1] * haze;
+        const fogB = FOG[2] * haze;
+
+        // +1024 keeps the value positive, so the mask can do the wrapping.
+        let worldX = posX + rowDistance * leftX + 1024;
+        let worldY = posY + rowDistance * leftY + 1024;
+        const stepU = rowDistance * spanX;
+        const stepV = rowDistance * spanY;
+
+        const row = y * bufferWidth;
+        for (let x = 0; x < bufferWidth; x += 1) {
+          const texel = tiles[
+            (((worldY * TEX) | 0) & TEX_MASK) * TEX + (((worldX * TEX) | 0) & TEX_MASK)
+          ];
+          pixels[row + x] = pack(
+            (texel & 0xff) * keep + fogR,
+            ((texel >> 8) & 0xff) * keep + fogG,
+            ((texel >> 16) & 0xff) * keep + fogB,
+          );
+          worldX += stepU;
+          worldY += stepV;
+        }
+      }
 
       for (let x = 0; x < bufferWidth; x += 1) {
         const offset = (2 * x) / bufferWidth - 1;
@@ -333,28 +452,36 @@
           }
         }
 
-        const lit = tile !== 0 && distance < FAR;
-        const column = lit ? (projection / Math.max(distance, 0.35)) | 0 : 0;
-        const top = lit ? Math.max(horizon - (column >> 1), 0) : horizon;
-        const bottom = lit ? Math.min(horizon + (column >> 1), bufferHeight) : horizon;
+        if (tile === 0 || distance >= FAR) continue;
 
-        for (let y = 0; y < top; y += 1) pixels[y * bufferWidth + x] = ceiling[y];
-        for (let y = bottom; y < bufferHeight; y += 1) pixels[y * bufferWidth + x] = floor[y];
+        const column = (projection / Math.max(distance, 0.35)) | 0;
+        const top = Math.max(horizon - (column >> 1), 0);
+        const bottom = Math.min(horizon + (column >> 1), bufferHeight);
 
-        if (!lit) continue;
+        // Where along the wall the ray landed, which is the texture's u.
+        const along = side === 0 ? posY + distance * rayY : posX + distance * rayX;
+        let texU = ((along - Math.floor(along)) * TEX) | 0;
+        if ((side === 0 && rayX > 0) || (side === 1 && rayY < 0)) texU = TEX_MASK - texU;
 
-        // The classic trick: y-facing walls are drawn darker, and that alone
-        // reads as light falling across the geometry.
-        const shade = side === 1 ? 0.66 : 1;
+        const texels = side === 1 ? shaded[tile - 1] : textures[tile - 1];
+        const stepV = TEX / column;
+        let texV = (top - horizon + column * 0.5) * stepV;
+
         const haze = clamp(distance / FAR, 0, 1) ** 1.3;
-        const [r, g, b] = walls[tile];
-        const colour = pack(
-          mix(r * shade, 12, haze),
-          mix(g * shade, 12, haze),
-          mix(b * shade, 15, haze),
-        );
+        const keep = 1 - haze;
+        const fogR = FOG[0] * haze;
+        const fogG = FOG[1] * haze;
+        const fogB = FOG[2] * haze;
 
-        for (let y = top; y < bottom; y += 1) pixels[y * bufferWidth + x] = colour;
+        for (let y = top; y < bottom; y += 1) {
+          const texel = texels[((texV | 0) & TEX_MASK) * TEX + texU];
+          texV += stepV;
+          pixels[y * bufferWidth + x] = pack(
+            (texel & 0xff) * keep + fogR,
+            ((texel >> 8) & 0xff) * keep + fogG,
+            ((texel >> 16) & 0xff) * keep + fogB,
+          );
+        }
       }
 
       buffer.blit(target, width, height);

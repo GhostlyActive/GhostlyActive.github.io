@@ -41,8 +41,6 @@ assets/
   img/projects/            Stills and MP4 loops pulled from the project repositories
   img/video/               YouTube poster frames, one per video ID
   logo.svg                 Round jellyfish mark — nav logo and favicon
-  logo-alt.svg             Earlier variant, swimming upward
-  logo-symmetric.svg       Earlier variant, symmetric fan
 ```
 
 ## Local preview
@@ -157,10 +155,6 @@ top, oral arms and tentacles trailing down and out through the edge of a deep-bl
 photograph redrawn rather than cropped, because a photo cutout turns to mush at 16 px — this stays
 sharp as both the 34 px nav mark and the favicon. Everything is clipped to `circle(32 32 32)`, so
 whatever leaves the disc is simply cut off.
-
-Two earlier variants sit beside it, both built the other way round — bell at the bottom, tentacles
-streaming up. To switch, swap the filename in `<link rel="icon">` and `.site-nav__logo` in
-`index.html` and all seven project pages.
 
 Colours are hard-coded, since a standalone SVG cannot read CSS custom properties. The mark is the
 one place on the site that is not in the amber palette; if that ever has to match `tokens.css`, the
