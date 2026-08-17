@@ -11,6 +11,10 @@
 <link rel="stylesheet" href="../assets/css/base.css">
 <link rel="stylesheet" href="../assets/css/site.css">
 <link rel="stylesheet" href="../assets/css/project.css">
+
+<!-- Reveal-on-scroll starts hidden, so the flag has to land before first paint;
+     without JS the class never appears and everything stays visible. -->
+<script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
 
@@ -50,7 +54,7 @@
       </div>
     </header>
 
-    <dl class="specs">
+    <dl class="specs reveal">
       <div><dt>Language</dt><dd>C#</dd></div>
       <div><dt>Rendering</dt><dd>raylib</dd></div>
       <div><dt>World</dt><dd>Chunk-based, procedurally generated</dd></div>
@@ -58,7 +62,7 @@
       <div><dt>Scope</dt><dd>Technical sandbox</dd></div>
     </dl>
 
-    <div class="media-block">
+    <div class="media-block reveal">
       <figure class="figure">
         <img src="../assets/img/projects/voxel-terraformer-1.jpg" alt="A green voxel hill rising to a rocky, snow-capped peak under a clear blue sky" loading="lazy" decoding="async">
         <figcaption>Procedurally generated terrain, rendered chunk by chunk.</figcaption>
@@ -116,7 +120,7 @@
 
     </div>
 
-    <div class="media-block media-block--wide">
+    <div class="media-block media-block--wide reveal">
       <div class="gallery">
         <figure class="figure">
           <img src="../assets/img/projects/voxel-terraformer-2.jpg" alt="A second view of the voxel world showing edited terrain" loading="lazy" decoding="async">
@@ -125,7 +129,7 @@
       </div>
     </div>
 
-    <nav class="pager" aria-label="More projects">
+    <nav class="pager reveal" aria-label="More projects">
       <a href="ghost-morse-telegraph.html"><span>← Previous</span><strong>Ghost Morse Telegraph</strong></a>
       <a href="voxel-pi.html"><span>Next →</span><strong>VoxelPi</strong></a>
     </nav>
@@ -140,5 +144,6 @@
   </div>
 </footer>
 
+<script src="../assets/js/reveal.js" defer></script>
 </body>
 </html>

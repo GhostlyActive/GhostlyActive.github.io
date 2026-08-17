@@ -11,6 +11,10 @@
 <link rel="stylesheet" href="../assets/css/base.css">
 <link rel="stylesheet" href="../assets/css/site.css">
 <link rel="stylesheet" href="../assets/css/project.css">
+
+<!-- Reveal-on-scroll starts hidden, so the flag has to land before first paint;
+     without JS the class never appears and everything stays visible. -->
+<script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
 
@@ -49,7 +53,7 @@
       </div>
     </header>
 
-    <dl class="specs">
+    <dl class="specs reveal">
       <div><dt>Language</dt><dd>Python</dd></div>
       <div><dt>Rendering</dt><dd>Pygame</dd></div>
       <div><dt>Target</dt><dd>Raspberry Pi</dd></div>
@@ -57,7 +61,7 @@
       <div><dt>Technique</dt><dd>VoxelSpace column rendering</dd></div>
     </dl>
 
-    <div class="media-block">
+    <div class="media-block reveal">
       <figure class="figure">
         <video src="../assets/img/projects/voxel-pi-flight.mp4"
                poster="../assets/img/projects/voxel-pi-flight.jpg"
@@ -113,7 +117,7 @@
 
     </div>
 
-    <div class="media-block media-block--wide">
+    <div class="media-block media-block--wide reveal">
       <div class="gallery">
         <figure class="figure">
           <video src="../assets/img/projects/voxel-pi-graphics.mp4"
@@ -125,7 +129,7 @@
       </div>
     </div>
 
-    <nav class="pager" aria-label="More projects">
+    <nav class="pager reveal" aria-label="More projects">
       <a href="voxel-terraformer.html"><span>← Previous</span><strong>VoxelTerraformer</strong></a>
       <a href="ghost-station.html"><span>Next →</span><strong>Ghost Station</strong></a>
     </nav>
@@ -141,5 +145,6 @@
 </footer>
 
 <script src="../assets/js/video.js" defer></script>
+<script src="../assets/js/reveal.js" defer></script>
 </body>
 </html>

@@ -137,6 +137,8 @@
   border-bottom: 1px solid var(--border);
 }
 
+/* Fallback texture: painted before the canvas, so it only shows through when
+   the hero scene never starts. */
 .hero::before {
   content: "";
   position: absolute;
@@ -150,8 +152,90 @@
   pointer-events: none;
 }
 
-.hero > * {
+.hero > .shell {
   position: relative;
+}
+
+/* ---------- Hero scene ---------- */
+
+.hero__scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero__canvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* The scene never gets in the way of the copy. Stacked layouts run text down the
+   whole hero, so those only get an even wash; once the hero splits into two
+   columns the wash turns diagonal and the right-hand side opens up. */
+.hero__scene::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    var(--bg) 0%,
+    rgba(11, 11, 13, 0.88) 10%,
+    rgba(11, 11, 13, 0.8) 52%,
+    rgba(11, 11, 13, 0.34) 82%,
+    var(--bg) 100%
+  );
+}
+
+@media (min-width: 62rem) {
+  .hero__scene::after {
+    background:
+      linear-gradient(97deg, var(--bg) 2%, rgba(11, 11, 13, 0.88) 30%, rgba(11, 11, 13, 0.1) 100%),
+      linear-gradient(to bottom, var(--bg) 0%, rgba(11, 11, 13, 0) 12%, rgba(11, 11, 13, 0) 84%, var(--bg) 100%);
+  }
+}
+
+.hero__scene-btn {
+  position: absolute;
+  right: var(--space-5);
+  bottom: var(--space-4);
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0.3rem 0.4rem 0.3rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-overlay);
+  backdrop-filter: blur(8px);
+  color: var(--text-faint);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  cursor: pointer;
+  transition: color 0.15s var(--ease), border-color 0.15s var(--ease);
+}
+
+.hero__scene-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent-line);
+}
+
+.hero__scene-btn kbd {
+  padding: 0.05rem 0.35rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  font: inherit;
+  color: var(--text-muted);
+}
+
+@media (max-width: 46rem) {
+  .hero__scene-btn {
+    right: var(--space-4);
+  }
+
+  .hero__scene-btn kbd {
+    display: none;
+  }
 }
 
 .hero__inner {
@@ -324,6 +408,68 @@
   color: var(--text-muted);
 }
 
+/* ---------- Topic filter ---------- */
+
+/* The chips are built by filter.js — without it there is nothing to show. */
+.filter:not([data-ready]) {
+  display: none;
+}
+
+.filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+}
+
+.filter__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 2.5rem;
+  padding: 0.35rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-raised);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  cursor: pointer;
+  transition: color 0.15s var(--ease), border-color 0.15s var(--ease), background-color 0.15s var(--ease);
+}
+
+.filter__chip:hover {
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+
+.filter__chip[aria-pressed="true"] {
+  border-color: var(--accent-line);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.filter__count {
+  font-size: 0.625rem;
+  color: var(--text-faint);
+}
+
+.filter__chip[aria-pressed="true"] .filter__count {
+  color: var(--accent);
+  opacity: 0.65;
+}
+
+.work-card.is-leaving,
+.reel-card.is-leaving {
+  opacity: 0;
+  transform: scale(0.97);
+}
+
+.work-card[hidden],
+.reel-card[hidden] {
+  display: none;
+}
+
 /* ---------- Work grid (repositories) ---------- */
 
 .work-grid {
@@ -339,7 +485,8 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  transition: border-color 0.2s var(--ease), transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+  transition: border-color 0.2s var(--ease), transform 0.2s var(--ease), box-shadow 0.2s var(--ease),
+    opacity 0.22s var(--ease);
 }
 
 .work-card:has(.work-card__title a:hover),
@@ -484,6 +631,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
+  transition: opacity 0.22s var(--ease), transform 0.22s var(--ease);
 }
 
 .reel-card__body {

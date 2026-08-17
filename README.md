@@ -5,8 +5,8 @@ renderers and firmware I write on my own time.
 
 **→ [ghostlyactive.github.io](https://ghostlyactive.github.io)**
 
-A static site: plain HTML, CSS and 60 lines of JavaScript. No build step, no dependencies, no
-framework. Clone it and open `index.html`.
+A static site: plain HTML, CSS and a few hundred lines of JavaScript. No build step, no
+dependencies, no framework. Clone it and open `index.html`.
 
 ## What is on it
 
@@ -35,6 +35,9 @@ assets/
     site.css               Landing-page components
     project.css            Project-page components
   js/video.js              YouTube facades, reduced-motion handling, deferred playback
+  js/hero.js               The two hero canvas scenes and the loop that drives them
+  js/filter.js             Topic chips over the card grids, built from the cards themselves
+  js/reveal.js             Fade-up on first scroll into view
   img/projects/            Stills and MP4 loops pulled from the project repositories
   img/video/               YouTube poster frames, one per video ID
   logo.svg                 Jellyfish mark — nav logo and favicon
@@ -114,6 +117,32 @@ future clip that is not near the top of its page.
 
 The hero clip is `ghost-pixel-lab-flight.mp4`, 400 × 224 native and displayed around 434 px wide —
 near enough to 1:1 to stay sharp. A larger source is fine; a smaller one will look soft.
+
+## The hero scene
+
+`hero.js` draws the hero background into a canvas. Two scenes share it and **M** switches between
+them; the choice is kept in `localStorage`.
+
+**Voxel terrain** is the Comanche VoxelSpace algorithm — the same front-to-back column renderer as
+VoxelPi and Outer Pixels. A seeded value-noise height map is rendered into a buffer at a third of
+the display size with a per-column occlusion array, then scaled up. Camera drift is automatic; the
+pointer steers the yaw and the horizon.
+
+**Sunrise alignment** is the 2001 opening: the sun climbs from behind a planet, past a moon, and
+leaves over the top edge — so the loop point is off screen and needs no cross-fade.
+
+Both pause when the hero scrolls away or the tab is hidden, and under
+`prefers-reduced-motion: reduce` a single frame is drawn and the loop never starts.
+
+## Filtering and reveals
+
+`filter.js` builds the chips above each grid from the `data-topics` on the cards, so the counts
+cannot drift and a visitor without JavaScript gets the full grid instead of dead controls. Topics
+are the coarse buckets worth filtering by; the tag row under each card stays free to carry detail
+that would make a useless filter of its own (`TCP`, `IO-Link`, `avr_boot`).
+
+`reveal.js` fades elements up the first time they scroll into view. The hidden state is behind the
+`.js` class set by an inline script in `<head>`, so the page is never blank without JavaScript.
 
 ## The logo
 

@@ -11,6 +11,10 @@
 <link rel="stylesheet" href="../assets/css/base.css">
 <link rel="stylesheet" href="../assets/css/site.css">
 <link rel="stylesheet" href="../assets/css/project.css">
+
+<!-- Reveal-on-scroll starts hidden, so the flag has to land before first paint;
+     without JS the class never appears and everything stays visible. -->
+<script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
 
@@ -55,7 +59,7 @@
       </div>
     </header>
 
-    <dl class="specs">
+    <dl class="specs reveal">
       <div><dt>Language</dt><dd>C++</dd></div>
       <div><dt>Graphics API</dt><dd>DirectX 11</dd></div>
       <div><dt>Platform layer</dt><dd>Win32, written directly</dd></div>
@@ -63,7 +67,7 @@
       <div><dt>Renderer</dt><dd>Textured · lit · depth-buffered</dd></div>
     </dl>
 
-    <div class="media-block">
+    <div class="media-block reveal">
       <figure class="figure">
         <video src="../assets/img/projects/ghost-engine-3d-light.mp4"
                poster="../assets/img/projects/ghost-engine-3d-light.jpg"
@@ -106,7 +110,7 @@
 
     </div>
 
-    <div class="media-block media-block--wide">
+    <div class="media-block media-block--wide reveal">
       <div class="gallery">
         <figure class="figure">
           <video src="../assets/img/projects/ghost-engine-3d-guidemo.mp4"
@@ -133,7 +137,7 @@
       </div>
     </div>
 
-    <div class="media-block">
+    <div class="media-block reveal">
       <h2 class="visually-hidden">Video</h2>
       <button class="video" type="button" data-video-id="ZwqW2sLskIs" data-video-title="Ghost Engine 3D — Part 1">
         <img src="../assets/img/video/ZwqW2sLskIs.jpg" alt="Ghost Engine 3D running, part one of the video series" loading="lazy" decoding="async">
@@ -142,7 +146,7 @@
       </button>
     </div>
 
-    <nav class="pager" aria-label="More projects">
+    <nav class="pager reveal" aria-label="More projects">
       <a href="ghost-engine-classic-2d.html"><span>← Previous</span><strong>Ghost Engine Classic 2D</strong></a>
       <a href="ghost-pixel-lab.html"><span>Next →</span><strong>Ghost Pixel Lab</strong></a>
     </nav>
@@ -158,5 +162,6 @@
 </footer>
 
 <script src="../assets/js/video.js" defer></script>
+<script src="../assets/js/reveal.js" defer></script>
 </body>
 </html>

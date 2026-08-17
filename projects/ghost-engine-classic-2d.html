@@ -11,6 +11,10 @@
 <link rel="stylesheet" href="../assets/css/base.css">
 <link rel="stylesheet" href="../assets/css/site.css">
 <link rel="stylesheet" href="../assets/css/project.css">
+
+<!-- Reveal-on-scroll starts hidden, so the flag has to land before first paint;
+     without JS the class never appears and everything stays visible. -->
+<script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
 
@@ -55,7 +59,7 @@
       </div>
     </header>
 
-    <dl class="specs">
+    <dl class="specs reveal">
       <div><dt>MCU</dt><dd>Arduino Mega 2560 · 16 MHz · 8 KB SRAM</dd></div>
       <div><dt>Display</dt><dd>SSD1351 RGB OLED · 128 × 128 · hardware SPI</dd></div>
       <div><dt>Language</dt><dd>C++17 on AVR-GCC</dd></div>
@@ -63,7 +67,7 @@
       <div><dt>Origin</dt><dd>Bachelor thesis</dd></div>
     </dl>
 
-    <div class="media-block">
+    <div class="media-block reveal">
       <figure class="figure">
         <img src="../assets/img/projects/ghost-engine-classic-2d-game.jpg" alt="The engine running on the OLED module: coloured walls in perspective, FPS counter top-left, minimap top-right" loading="lazy" decoding="async">
         <figcaption>Photographed off the panel at close range — the pixel grid of the 1.5" OLED is the actual resolution the engine renders at.</figcaption>
@@ -282,7 +286,7 @@
 
     </div>
 
-    <div class="media-block media-block--wide">
+    <div class="media-block media-block--wide reveal">
       <div class="gallery">
         <figure class="figure">
           <img src="../assets/img/projects/ghost-engine-classic-2d-scene.jpg" alt="A rendered scene from the engine showing coloured walls receding in perspective" loading="lazy" decoding="async">
@@ -303,7 +307,7 @@
       </div>
     </div>
 
-    <div class="media-block media-block--wide">
+    <div class="media-block media-block--wide reveal">
       <h2 class="visually-hidden">Videos</h2>
       <div class="gallery">
         <div>
@@ -325,7 +329,7 @@
       </div>
     </div>
 
-    <nav class="pager" aria-label="More projects">
+    <nav class="pager reveal" aria-label="More projects">
       <a href="ghost-station.html"><span>← Previous</span><strong>Ghost Station</strong></a>
       <a href="ghost-engine-3d.html"><span>Next →</span><strong>Ghost Engine 3D</strong></a>
     </nav>
@@ -341,5 +345,6 @@
 </footer>
 
 <script src="../assets/js/video.js" defer></script>
+<script src="../assets/js/reveal.js" defer></script>
 </body>
 </html>

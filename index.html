@@ -17,6 +17,10 @@
 <link rel="stylesheet" href="assets/css/tokens.css">
 <link rel="stylesheet" href="assets/css/base.css">
 <link rel="stylesheet" href="assets/css/site.css">
+
+<!-- Reveal-on-scroll starts hidden, so the flag has to land before first paint;
+     without JS the class never appears and everything stays visible. -->
+<script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
 
@@ -46,6 +50,14 @@
 <main id="main">
 
   <header class="hero" id="top">
+    <div class="hero__scene">
+      <canvas class="hero__canvas" data-hero-canvas aria-hidden="true"></canvas>
+    </div>
+    <button class="hero__scene-btn" type="button" data-scene-toggle hidden>
+      <span class="hero__scene-name" data-scene-name>Voxel terrain</span>
+      <kbd>M</kbd>
+    </button>
+
     <div class="shell">
       <div class="hero__inner">
         <div>
@@ -82,15 +94,15 @@
       <dl class="hero__facts">
         <div class="hero__fact">
           <dt>Focus</dt>
-          <dd>Interactive installations, AR, real-time 3D</dd>
+          <dd>Low-level, hardware-near programming</dd>
         </div>
         <div class="hero__fact">
           <dt>Background</dt>
-          <dd>Electrical engineering</dd>
+          <dd>Electrical engineering — automation, robotics, signal processing, drive technology</dd>
         </div>
         <div class="hero__fact">
           <dt>Languages</dt>
-          <dd>C++, C#, Python</dd>
+          <dd>C++, C#, C, Python, JavaScript</dd>
         </div>
         <div class="hero__fact">
           <dt>Engines</dt>
@@ -108,7 +120,7 @@
 
   <section class="section" id="builds">
     <div class="shell">
-      <div class="section__head">
+      <div class="section__head reveal">
         <span class="section__index">01 — Own builds</span>
         <h2>Things I built to find out how they work</h2>
         <p>
@@ -118,11 +130,16 @@
         </p>
       </div>
 
-      <div class="work-grid">
+      <div class="filter"
+           data-filter="#builds-grid"
+           data-filter-label="own builds"
+           data-topics="Engines &amp; renderers|Embedded|Voxel|Low-level systems|Games"></div>
 
-        <article class="work-card">
+      <div class="work-grid" id="builds-grid">
+
+        <article class="work-card reveal" data-topics="Engines &amp; renderers|Embedded|Voxel|Low-level systems|Games">
           <div class="work-card__media">
-            <img src="assets/img/projects/ghost-pixel-lab-space.jpg" alt="Outer Pixels running on the 1.8-inch AMOLED: two planets lit against an amber sky" loading="lazy" decoding="async">
+            <img src="assets/img/projects/ghost-pixel-lab-surface.jpg" alt="Outer Pixels on the 1.8-inch AMOLED: coloured orbit paths around a targeted planet, the sun cut off at the right edge" loading="lazy" decoding="async">
             <span class="work-card__year">2026</span>
           </div>
           <div class="work-card__body">
@@ -138,6 +155,8 @@
               <li class="tag">ESP32-S3</li>
               <li class="tag">AMOLED / QSPI</li>
               <li class="tag">BASIC interpreter</li>
+              <li class="tag">Voxel terrain</li>
+              <li class="tag">BLE</li>
             </ul>
             <div class="work-card__foot">
               <span>Sandbox · active</span>
@@ -146,7 +165,7 @@
           </div>
         </article>
 
-        <article class="work-card">
+        <article class="work-card reveal" data-topics="Embedded|Low-level systems">
           <div class="work-card__media">
             <img src="assets/img/projects/ghost-morse-telegraph-build.jpg" alt="The finished telegraph in a wooden box, OLED showing Ghost Morse" loading="lazy" decoding="async">
             <span class="work-card__year">2026</span>
@@ -161,6 +180,7 @@
             </p>
             <ul class="tag-row">
               <li class="tag tag--accent">C++</li>
+              <li class="tag">Arduino</li>
               <li class="tag">Solenoid / TIP120</li>
               <li class="tag">State machine</li>
               <li class="tag">SSD1351</li>
@@ -172,7 +192,7 @@
           </div>
         </article>
 
-        <article class="work-card">
+        <article class="work-card reveal" data-topics="Engines &amp; renderers|Voxel">
           <div class="work-card__media">
             <img src="assets/img/projects/voxel-terraformer-1.jpg" alt="A green voxel hill with a rocky peak under a blue sky" loading="lazy" decoding="async">
             <span class="work-card__year">2026</span>
@@ -189,6 +209,7 @@
               <li class="tag tag--accent">C#</li>
               <li class="tag">raylib</li>
               <li class="tag">Chunked world</li>
+              <li class="tag">Voxel raycasting</li>
             </ul>
             <div class="work-card__foot">
               <span>Technical sandbox</span>
@@ -197,7 +218,7 @@
           </div>
         </article>
 
-        <article class="work-card">
+        <article class="work-card reveal" data-topics="Engines &amp; renderers|Voxel|Embedded">
           <div class="work-card__media">
             <img src="assets/img/projects/voxel-pi-graphics.jpg" alt="VoxelSpace terrain with a stepped pyramid rendered on the Raspberry Pi" loading="lazy" decoding="async">
             <span class="work-card__year">2023</span>
@@ -214,6 +235,8 @@
               <li class="tag tag--accent">Python</li>
               <li class="tag">Pygame</li>
               <li class="tag">Raspberry Pi</li>
+              <li class="tag">VoxelSpace</li>
+              <li class="tag">Height map</li>
             </ul>
             <div class="work-card__foot">
               <span>Open source</span>
@@ -222,7 +245,7 @@
           </div>
         </article>
 
-        <article class="work-card">
+        <article class="work-card reveal" data-topics="Embedded|Low-level systems|Games">
           <div class="work-card__media">
             <img src="assets/img/projects/ghost-station-almost-finished.jpg" alt="The Ghost Station board: OLED module, Arduino Nano, SD card reader and yellow arcade buttons" loading="lazy" decoding="async">
             <span class="work-card__year">2022</span>
@@ -237,9 +260,10 @@
             </p>
             <ul class="tag-row">
               <li class="tag tag--accent">C++</li>
+              <li class="tag">Arduino</li>
+              <li class="tag">Bootloader</li>
               <li class="tag">avr_boot</li>
               <li class="tag">SD / SPI</li>
-              <li class="tag">Hardware</li>
             </ul>
             <div class="work-card__foot">
               <span>Console build</span>
@@ -248,7 +272,7 @@
           </div>
         </article>
 
-        <article class="work-card">
+        <article class="work-card reveal" data-topics="Engines &amp; renderers|Embedded|Low-level systems">
           <div class="work-card__media">
             <img src="assets/img/projects/ghost-engine-classic-2d-game.jpg" alt="The engine running on a 1.5-inch RGB OLED, individual pixels visible, minimap in the corner" loading="lazy" decoding="async">
             <span class="work-card__year">2021</span>
@@ -266,6 +290,7 @@
               <li class="tag">AVR / 8 KB SRAM</li>
               <li class="tag">BSP</li>
               <li class="tag">Raycasting</li>
+              <li class="tag">Occlusion buffer</li>
             </ul>
             <div class="work-card__foot">
               <span>Grew out of my bachelor thesis</span>
@@ -274,7 +299,7 @@
           </div>
         </article>
 
-        <article class="work-card">
+        <article class="work-card reveal" data-topics="Engines &amp; renderers|Low-level systems">
           <div class="work-card__media">
             <img src="assets/img/projects/ghost-engine-3d-light.jpg" alt="A lit temple model rendered in the engine, with ImGui panels for light and camera" loading="lazy" decoding="async">
             <span class="work-card__year">2021</span>
@@ -291,6 +316,7 @@
               <li class="tag tag--accent">C++</li>
               <li class="tag">DirectX 11</li>
               <li class="tag">Win32</li>
+              <li class="tag">HLSL</li>
               <li class="tag">ImGui</li>
             </ul>
             <div class="work-card__foot">
@@ -308,7 +334,7 @@
 
   <section class="section" id="studio">
     <div class="shell">
-      <div class="section__head">
+      <div class="section__head reveal">
         <span class="section__index">02 — Client work &amp; experiments</span>
         <h2>Interactive installations, AR and virtual production</h2>
         <p>
@@ -319,9 +345,14 @@
         </p>
       </div>
 
-      <div class="reel-grid">
+      <div class="filter"
+           data-filter="#studio-grid"
+           data-filter-label="projects"
+           data-topics="AR|Installations|Games|Virtual production|Rendering|Hardware &amp; I/O"></div>
 
-        <article class="reel-card">
+      <div class="reel-grid" id="studio-grid">
+
+        <article class="reel-card reveal" data-topics="AR|Installations|Hardware &amp; I/O">
           <button class="video" type="button" data-video-id="2eatbBkr9Xw" data-video-title="Expo 2025 — AR Cooperative Multiplayer">
             <img src="assets/img/video/2eatbBkr9Xw.jpg" alt="Three iPads showing a shared augmented-reality scene on a wooden table" loading="lazy" decoding="async">
             <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
@@ -338,12 +369,14 @@
               <li class="tag tag--cyan">Unity</li>
               <li class="tag">Model tracking</li>
               <li class="tag">Multiplayer</li>
+              <li class="tag">TCP</li>
+              <li class="tag">iPad</li>
             </ul>
-            <p class="reel-card__meta">Osaka · Nov 2025</p>
+            <p class="reel-card__meta">Osaka · Apr 2025</p>
           </div>
         </article>
 
-        <article class="reel-card">
+        <article class="reel-card reveal" data-topics="Games">
           <button class="video" type="button" data-video-id="iVWfP9RTawk" data-video-title="BMW Mini Arcade Mobile">
             <img src="assets/img/video/iVWfP9RTawk.jpg" alt="Retro arcade racing game running on a phone next to the desktop version" loading="lazy" decoding="async">
             <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
@@ -360,12 +393,13 @@
               <li class="tag tag--cyan">Unity</li>
               <li class="tag">WebGL</li>
               <li class="tag">Mobile</li>
+              <li class="tag">Arcade</li>
             </ul>
-            <p class="reel-card__meta">BMW Welt · Apr 2025</p>
+            <p class="reel-card__meta">BMW Welt · Jan 2025</p>
           </div>
         </article>
 
-        <article class="reel-card">
+        <article class="reel-card reveal" data-topics="Installations|Hardware &amp; I/O">
           <button class="video" type="button" data-video-id="I-iDyr4fyKo" data-video-title="Museum Exhibition — Senckenberg">
             <img src="assets/img/video/I-iDyr4fyKo.jpg" alt="Museum exhibit with a dinosaur skeleton and an interactive screen installation" loading="lazy" decoding="async">
             <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
@@ -381,13 +415,14 @@
             <ul class="tag-row">
               <li class="tag tag--cyan">Unity</li>
               <li class="tag">IO-Link</li>
+              <li class="tag">Physical buttons</li>
               <li class="tag">Installation</li>
             </ul>
             <p class="reel-card__meta">Frankfurt · Feb 2024</p>
           </div>
         </article>
 
-        <article class="reel-card">
+        <article class="reel-card reveal" data-topics="AR">
           <button class="video" type="button" data-video-id="XtH-58Kl0m8" data-video-title="AR Wall">
             <img src="assets/img/video/XtH-58Kl0m8.jpg" alt="An iPad held up to a pink printed wall graphic, playing a video overlay" loading="lazy" decoding="async">
             <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
@@ -404,12 +439,13 @@
               <li class="tag tag--cyan">AR Foundation</li>
               <li class="tag">ARKit</li>
               <li class="tag">Image tracking</li>
+              <li class="tag">iPad Pro</li>
             </ul>
             <p class="reel-card__meta">Sep 2023</p>
           </div>
         </article>
 
-        <article class="reel-card">
+        <article class="reel-card reveal" data-topics="AR|Installations|Hardware &amp; I/O">
           <button class="video" type="button" data-video-id="dIcUQG9apzw" data-video-title="AR Car &amp; Dynamic UI">
             <img src="assets/img/video/dIcUQG9apzw.jpg" alt="A car model with an augmented-reality overlay highlighting the brake system" loading="lazy" decoding="async">
             <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
@@ -425,13 +461,14 @@
             <ul class="tag-row">
               <li class="tag tag--cyan">Unity</li>
               <li class="tag">VisionLib</li>
+              <li class="tag">Model tracking</li>
               <li class="tag">LED control</li>
             </ul>
-            <p class="reel-card__meta">May 2023</p>
+            <p class="reel-card__meta">Jul 2022</p>
           </div>
         </article>
 
-        <article class="reel-card">
+        <article class="reel-card reveal" data-topics="AR">
           <button class="video" type="button" data-video-id="quYHQZ7JM2M" data-video-title="AR City &amp; AR Factory">
             <img src="assets/img/video/quYHQZ7JM2M.jpg" alt="A physical city model on a table with augmented-reality buildings overlaid" loading="lazy" decoding="async">
             <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
@@ -447,13 +484,14 @@
             <ul class="tag-row">
               <li class="tag tag--cyan">Unity</li>
               <li class="tag">VisionLib</li>
+              <li class="tag">Model tracking</li>
               <li class="tag">iPad</li>
             </ul>
             <p class="reel-card__meta">Nov 2022</p>
           </div>
         </article>
 
-        <article class="reel-card">
+        <article class="reel-card reveal" data-topics="Games|Rendering">
           <button class="video" type="button" data-video-id="TDHg5-w709Q" data-video-title="Gravity Bang Bang">
             <img src="assets/img/video/TDHg5-w709Q.jpg" alt="A sun rising over a dark planet in a space demo" loading="lazy" decoding="async">
             <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
@@ -469,12 +507,13 @@
             <ul class="tag-row">
               <li class="tag tag--cyan">Unreal Engine 5</li>
               <li class="tag">Physics</li>
+              <li class="tag">Directional gravity</li>
             </ul>
             <p class="reel-card__meta">Jul 2022</p>
           </div>
         </article>
 
-        <article class="reel-card">
+        <article class="reel-card reveal" data-topics="Games">
           <button class="video" type="button" data-video-id="3f1-CgpEXHA" data-video-title="Shoot Bang Bang">
             <img src="assets/img/video/3f1-CgpEXHA.jpg" alt="First-person view in a bright sci-fi corridor with a floating pickup" loading="lazy" decoding="async">
             <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
@@ -490,12 +529,13 @@
             <ul class="tag-row">
               <li class="tag tag--cyan">Unreal Engine 5</li>
               <li class="tag">Lyra</li>
+              <li class="tag">City Sample</li>
             </ul>
             <p class="reel-card__meta">Jun 2022</p>
           </div>
         </article>
 
-        <article class="reel-card">
+        <article class="reel-card reveal" data-topics="Virtual production|Rendering">
           <button class="video" type="button" data-video-id="Eeb-kDdDqs4" data-video-title="MetaHuman Avatar with Face Tracking">
             <img src="assets/img/video/Eeb-kDdDqs4.jpg" alt="A photorealistic digital human presenter on a green background" loading="lazy" decoding="async">
             <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
@@ -512,12 +552,35 @@
               <li class="tag tag--cyan">Unreal Engine</li>
               <li class="tag">Live Link</li>
               <li class="tag">MetaHuman</li>
+              <li class="tag">Face capture</li>
             </ul>
             <p class="reel-card__meta">May 2022</p>
           </div>
         </article>
 
-        <article class="reel-card">
+        <article class="reel-card reveal" data-topics="Virtual production|Rendering">
+          <button class="video" type="button" data-video-id="Zpus85vJg08" data-video-title="Virtual Production — Greenscreen">
+            <img src="assets/img/video/Zpus85vJg08.jpg" alt="A dense virtual city street rendered from above" loading="lazy" decoding="async">
+            <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
+            <span class="video__duration">0:51</span>
+            <span class="visually-hidden">Play video: Virtual Production Greenscreen</span>
+          </button>
+          <div class="reel-card__body">
+            <h3>Virtual Production — Greenscreen</h3>
+            <p>
+              The first pass at virtual production in Unreal Engine 5, shot against a green screen
+              inside the City Sample environment.
+            </p>
+            <ul class="tag-row">
+              <li class="tag tag--cyan">Unreal Engine 5</li>
+              <li class="tag">Compositing</li>
+              <li class="tag">City Sample</li>
+            </ul>
+            <p class="reel-card__meta">Apr 2022</p>
+          </div>
+        </article>
+
+        <article class="reel-card reveal" data-topics="Virtual production|Rendering|Hardware &amp; I/O">
           <button class="video" type="button" data-video-id="h_uJESdRn-c" data-video-title="Virtual Production with Camera Tracking">
             <img src="assets/img/video/h_uJESdRn-c.jpg" alt="A person composited into a virtual city scene in real time" loading="lazy" decoding="async">
             <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
@@ -539,28 +602,7 @@
           </div>
         </article>
 
-        <article class="reel-card">
-          <button class="video" type="button" data-video-id="Zpus85vJg08" data-video-title="Virtual Production — Greenscreen">
-            <img src="assets/img/video/Zpus85vJg08.jpg" alt="A dense virtual city street rendered from above" loading="lazy" decoding="async">
-            <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
-            <span class="video__duration">0:51</span>
-            <span class="visually-hidden">Play video: Virtual Production Greenscreen</span>
-          </button>
-          <div class="reel-card__body">
-            <h3>Virtual Production — Greenscreen</h3>
-            <p>
-              The first pass at virtual production in Unreal Engine 5, shot against a green screen
-              inside the City Sample environment.
-            </p>
-            <ul class="tag-row">
-              <li class="tag tag--cyan">Unreal Engine 5</li>
-              <li class="tag">Compositing</li>
-            </ul>
-            <p class="reel-card__meta">Apr 2022</p>
-          </div>
-        </article>
-
-        <article class="reel-card">
+        <article class="reel-card reveal" data-topics="AR">
           <button class="video" type="button" data-video-id="_Zpy3qBULKM" data-video-title="AR Town">
             <img src="assets/img/video/_Zpy3qBULKM.jpg" alt="A long white architectural model with augmented-reality buildings overlaid" loading="lazy" decoding="async">
             <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
@@ -577,12 +619,13 @@
               <li class="tag tag--cyan">Unity</li>
               <li class="tag">ARKit</li>
               <li class="tag">Object tracking</li>
+              <li class="tag">Multi-anchor</li>
             </ul>
-            <p class="reel-card__meta">Feb 2022</p>
+            <p class="reel-card__meta">Jul 2021</p>
           </div>
         </article>
 
-        <article class="reel-card">
+        <article class="reel-card reveal" data-topics="Rendering">
           <button class="video" type="button" data-video-id="QvNvfzzlX60" data-video-title="Monolith Landscape">
             <img src="assets/img/video/QvNvfzzlX60.jpg" alt="A monolith standing on a golden hillside at dusk" loading="lazy" decoding="async">
             <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
@@ -598,6 +641,7 @@
             <ul class="tag-row">
               <li class="tag tag--cyan">Unreal Engine 5</li>
               <li class="tag">Landscape</li>
+              <li class="tag">Lighting</li>
             </ul>
             <p class="reel-card__meta">Dec 2021</p>
           </div>
@@ -611,11 +655,15 @@
 
   <section class="contact" id="contact">
     <div class="shell contact__grid">
-      <div class="contact__body">
+      <div class="contact__body reveal">
         <h2>Get in touch</h2>
         <p>
-          Happy to talk through any of these projects in detail — how they were built, what broke
-          along the way, and what I would do differently now.
+          The own builds are mine, written outside work — ask me anything about those: how they
+          were put together, what broke, what I would do differently now.
+        </p>
+        <p>
+          The client work I can show and describe in outline. I am in permanent employment, so the
+          implementation behind it stays with my employer.
         </p>
         <a class="btn btn--primary" href="mailto:marlontamer@gmail.com">Write me an email</a>
 
@@ -650,5 +698,8 @@
 </footer>
 
 <script src="assets/js/video.js" defer></script>
+<script src="assets/js/reveal.js" defer></script>
+<script src="assets/js/filter.js" defer></script>
+<script src="assets/js/hero.js" defer></script>
 </body>
 </html>

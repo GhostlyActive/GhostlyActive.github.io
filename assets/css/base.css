@@ -95,9 +95,32 @@ a {
   transform: translateY(0);
 }
 
+/* Reveal on scroll. Gated on `.js` so the content is never hidden from a
+   visitor without JavaScript, and an animation rather than a transition so it
+   does not overwrite the hover transitions the cards declare themselves. */
+.js .reveal {
+  opacity: 0;
+}
+
+.js .reveal.is-visible {
+  opacity: 1;
+  animation: reveal-up 0.55s var(--ease) backwards;
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  .js .reveal {
+    opacity: 1;
   }
 
   *,

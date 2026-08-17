@@ -11,6 +11,10 @@
 <link rel="stylesheet" href="../assets/css/base.css">
 <link rel="stylesheet" href="../assets/css/site.css">
 <link rel="stylesheet" href="../assets/css/project.css">
+
+<!-- Reveal-on-scroll starts hidden, so the flag has to land before first paint;
+     without JS the class never appears and everything stays visible. -->
+<script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
 
@@ -50,7 +54,7 @@
       </div>
     </header>
 
-    <dl class="specs">
+    <dl class="specs reveal">
       <div><dt>MCU</dt><dd>Arduino (AVR)</dd></div>
       <div><dt>Display</dt><dd>1.5" RGB OLED module</dd></div>
       <div><dt>Storage</dt><dd>microSD over SPI</dd></div>
@@ -58,7 +62,7 @@
       <div><dt>Language</dt><dd>C++</dd></div>
     </dl>
 
-    <div class="media-block">
+    <div class="media-block reveal">
       <figure class="figure">
         <video src="../assets/img/projects/ghost-station-gameplay.mp4"
                poster="../assets/img/projects/ghost-station-gameplay.jpg"
@@ -116,7 +120,7 @@
 
     </div>
 
-    <div class="media-block media-block--wide">
+    <div class="media-block media-block--wide reveal">
       <div class="gallery">
         <figure class="figure">
           <img src="../assets/img/projects/ghost-station-almost-finished.jpg" alt="The assembled board: OLED module, Arduino Nano, SD card reader and five yellow arcade buttons" loading="lazy" decoding="async">
@@ -140,7 +144,7 @@
       </div>
     </div>
 
-    <nav class="pager" aria-label="More projects">
+    <nav class="pager reveal" aria-label="More projects">
       <a href="voxel-pi.html"><span>← Previous</span><strong>VoxelPi</strong></a>
       <a href="ghost-engine-classic-2d.html"><span>Next →</span><strong>Ghost Engine Classic 2D</strong></a>
     </nav>
@@ -156,5 +160,6 @@
 </footer>
 
 <script src="../assets/js/video.js" defer></script>
+<script src="../assets/js/reveal.js" defer></script>
 </body>
 </html>

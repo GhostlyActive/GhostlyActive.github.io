@@ -11,6 +11,10 @@
 <link rel="stylesheet" href="../assets/css/base.css">
 <link rel="stylesheet" href="../assets/css/site.css">
 <link rel="stylesheet" href="../assets/css/project.css">
+
+<!-- Reveal-on-scroll starts hidden, so the flag has to land before first paint;
+     without JS the class never appears and everything stays visible. -->
+<script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
 
@@ -55,7 +59,7 @@
       </div>
     </header>
 
-    <dl class="specs">
+    <dl class="specs reveal">
       <div><dt>MCU</dt><dd>Arduino Uno</dd></div>
       <div><dt>Display</dt><dd>SSD1351 OLED · 128 × 128 · hardware SPI</dd></div>
       <div><dt>Actuator</dt><dd>Solenoid via TIP120 darlington</dd></div>
@@ -63,7 +67,7 @@
       <div><dt>Supply</dt><dd>Single 9 V rail</dd></div>
     </dl>
 
-    <div class="media-block">
+    <div class="media-block reveal">
       <figure class="figure">
         <video src="../assets/img/projects/ghost-morse-telegraph-loop.mp4"
                poster="../assets/img/projects/ghost-morse-telegraph-loop.jpg"
@@ -186,7 +190,7 @@
 
     </div>
 
-    <div class="media-block media-block--wide">
+    <div class="media-block media-block--wide reveal">
       <div class="gallery">
         <figure class="figure">
           <img src="../assets/img/projects/ghost-morse-telegraph-inside.jpg" alt="Inside the enclosure: wiring, transistor and the OLED module" loading="lazy" decoding="async">
@@ -199,7 +203,7 @@
       </div>
     </div>
 
-    <div class="media-block">
+    <div class="media-block reveal">
       <h2 class="visually-hidden">Video</h2>
       <button class="video" type="button" data-video-id="MOnRhFvCphw" data-video-title="Morse Telegraph on Arduino">
         <img src="../assets/img/video/MOnRhFvCphw.jpg" alt="The Ghost Morse Telegraph being keyed by hand" loading="lazy" decoding="async">
@@ -209,7 +213,7 @@
       </button>
     </div>
 
-    <nav class="pager" aria-label="More projects">
+    <nav class="pager reveal" aria-label="More projects">
       <a href="ghost-pixel-lab.html"><span>← Previous</span><strong>Ghost Pixel Lab</strong></a>
       <a href="voxel-terraformer.html"><span>Next →</span><strong>VoxelTerraformer</strong></a>
     </nav>
@@ -225,5 +229,6 @@
 </footer>
 
 <script src="../assets/js/video.js" defer></script>
+<script src="../assets/js/reveal.js" defer></script>
 </body>
 </html>

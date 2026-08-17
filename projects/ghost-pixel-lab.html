@@ -11,6 +11,10 @@
 <link rel="stylesheet" href="../assets/css/base.css">
 <link rel="stylesheet" href="../assets/css/site.css">
 <link rel="stylesheet" href="../assets/css/project.css">
+
+<!-- Reveal-on-scroll starts hidden, so the flag has to land before first paint;
+     without JS the class never appears and everything stays visible. -->
+<script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
 
@@ -55,7 +59,7 @@
       </div>
     </header>
 
-    <dl class="specs">
+    <dl class="specs reveal">
       <div><dt>MCU</dt><dd>ESP32-S3R8 · 240 MHz · 8 MB PSRAM</dd></div>
       <div><dt>Display</dt><dd>SH8601 AMOLED · 368 × 448 · QSPI</dd></div>
       <div><dt>Language</dt><dd>Modern C++</dd></div>
@@ -63,7 +67,7 @@
       <div><dt>Status</dt><dd>Active sandbox</dd></div>
     </dl>
 
-    <div class="media-block">
+    <div class="media-block reveal">
       <figure class="figure">
         <video src="../assets/img/projects/ghost-pixel-lab-flight.mp4"
                poster="../assets/img/projects/ghost-pixel-lab-flight.jpg"
@@ -135,7 +139,7 @@
         crosshair.
       </p>
 
-      <div class="media-block media-block--wide">
+      <div class="media-block media-block--wide reveal">
         <div class="gallery">
           <figure class="figure">
             <video src="../assets/img/projects/ghost-pixel-lab-terrain.mp4"
@@ -165,7 +169,7 @@
 
     </div>
 
-    <div class="media-block">
+    <div class="media-block reveal">
       <h2 class="visually-hidden">Video</h2>
       <button class="video" type="button" data-video-id="ePTqaHAo_ig" data-video-title="Outer Pixels — Pocket Space Game">
         <img src="../assets/img/video/ePTqaHAo_ig.jpg" alt="Outer Pixels running on the handheld AMOLED board" loading="lazy" decoding="async">
@@ -175,7 +179,7 @@
       </button>
     </div>
 
-    <nav class="pager" aria-label="More projects">
+    <nav class="pager reveal" aria-label="More projects">
       <a href="ghost-engine-3d.html"><span>← Previous</span><strong>Ghost Engine 3D</strong></a>
       <a href="ghost-morse-telegraph.html"><span>Next →</span><strong>Ghost Morse Telegraph</strong></a>
     </nav>
@@ -191,5 +195,6 @@
 </footer>
 
 <script src="../assets/js/video.js" defer></script>
+<script src="../assets/js/reveal.js" defer></script>
 </body>
 </html>
