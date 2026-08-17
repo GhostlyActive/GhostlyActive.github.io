@@ -35,7 +35,7 @@ assets/
     site.css               Landing-page components
     project.css            Project-page components
   js/video.js              YouTube facades, reduced-motion handling, deferred playback
-  js/hero.js               The two hero canvas scenes and the loop that drives them
+  js/scenes.js             The two canvas backgrounds and the loop that drives them
   js/filter.js             Topic chips over the card grids, built from the cards themselves
   js/reveal.js             Fade-up on first scroll into view
   img/projects/            Stills and MP4 loops pulled from the project repositories
@@ -118,20 +118,26 @@ future clip that is not near the top of its page.
 The hero clip is `ghost-pixel-lab-flight.mp4`, 400 × 224 native and displayed around 434 px wide —
 near enough to 1:1 to stay sharp. A larger source is fine; a smaller one will look soft.
 
-## The hero scene
+## The canvas scenes
 
-`hero.js` draws the hero background into a canvas. Two scenes share it and **M** switches between
-them; the choice is kept in `localStorage`.
+`scenes.js` draws a background behind two sections. A `<canvas data-scene="…">` inside a `.scene`
+wrapper picks the renderer; both write into a pixel buffer at a third of the display size, which is
+then scaled up with smoothing off.
 
-**Voxel terrain** is the Comanche VoxelSpace algorithm — the same front-to-back column renderer as
-VoxelPi and Outer Pixels. A seeded value-noise height map is rendered into a buffer at a third of
-the display size with a per-column occlusion array, then scaled up. Camera drift is automatic; the
-pointer steers the yaw and the horizon.
+**`terrain`** (hero) is the Comanche VoxelSpace algorithm — the same front-to-back column renderer
+as VoxelPi and Outer Pixels. A seeded value-noise height map, a per-column occlusion array, camera
+drift on a slow sine; the pointer steers yaw and horizon.
 
-**Sunrise alignment** is the 2001 opening: the sun climbs from behind a planet, past a moon, and
-leaves over the top edge — so the loop point is off screen and needs no cross-fade.
+**`raycast`** (contact) is Wolfenstein's grid DDA, the algorithm underneath Ghost Engine Classic 2D.
+The camera circles a cleared ring through a field of pillars, so no collision test is needed.
+Y-facing walls are drawn darker — the original's stand-in for lighting.
 
-Both pause when the hero scrolls away or the tab is hidden, and under
+Both take their **vertical scale from the buffer width, not its height**. The field of view is
+horizontal, so scaling off the height stretches the world vertically on a tall phone canvas. For
+the same reason `.scene` is only full-bleed once the layout has two columns; below that it is a band
+along the bottom edge, which is a sane shape for a horizon.
+
+Both pause when their section scrolls away or the tab is hidden, and under
 `prefers-reduced-motion: reduce` a single frame is drawn and the loop never starts.
 
 ## Filtering and reveals

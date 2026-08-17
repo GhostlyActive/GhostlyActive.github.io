@@ -156,85 +156,82 @@
   position: relative;
 }
 
-/* ---------- Hero scene ---------- */
+/* ---------- Canvas scenes ---------- */
 
-.hero__scene {
+/* Stacked layouts run copy down the whole section and are far taller than they
+   are wide, which is the wrong shape for a horizon. So on a phone the scene is
+   a band along the bottom edge; only the two-column layout gets the full bleed. */
+.scene {
   position: absolute;
-  inset: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: min(52vh, 380px);
   overflow: hidden;
   pointer-events: none;
 }
 
-.hero__canvas {
+.scene canvas {
   width: 100%;
   height: 100%;
 }
 
-/* The scene never gets in the way of the copy. Stacked layouts run text down the
-   whole hero, so those only get an even wash; once the hero splits into two
-   columns the wash turns diagonal and the right-hand side opens up. */
-.hero__scene::after {
+.scene::after {
   content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(
     to bottom,
     var(--bg) 0%,
-    rgba(11, 11, 13, 0.88) 10%,
-    rgba(11, 11, 13, 0.8) 52%,
-    rgba(11, 11, 13, 0.34) 82%,
+    rgba(11, 11, 13, 0.74) 26%,
+    rgba(11, 11, 13, 0.62) 62%,
+    rgba(11, 11, 13, 0.42) 86%,
+    var(--bg) 100%
+  );
+}
+
+/* A horizon belongs at the foot of the hero, but the corridor has no horizon
+   and the contact section is tall when stacked — bottom-anchored it would sit
+   under the showreel, off screen. */
+.contact__scene {
+  top: 0;
+  bottom: auto;
+}
+
+.contact__scene::after {
+  background: linear-gradient(
+    to bottom,
+    var(--bg) 0%,
+    rgba(11, 11, 13, 0.72) 22%,
+    rgba(11, 11, 13, 0.66) 64%,
     var(--bg) 100%
   );
 }
 
 @media (min-width: 62rem) {
-  .hero__scene::after {
+  .scene {
+    top: 0;
+    height: auto;
+  }
+
+  .contact__scene {
+    bottom: 0;
+  }
+
+  /* The copy sits in the left column, so the wash turns diagonal and the
+     right-hand side opens up. */
+  .scene::after {
     background:
       linear-gradient(97deg, var(--bg) 2%, rgba(11, 11, 13, 0.88) 30%, rgba(11, 11, 13, 0.1) 100%),
       linear-gradient(to bottom, var(--bg) 0%, rgba(11, 11, 13, 0) 12%, rgba(11, 11, 13, 0) 84%, var(--bg) 100%);
   }
-}
 
-.hero__scene-btn {
-  position: absolute;
-  right: var(--space-5);
-  bottom: var(--space-4);
-  z-index: 1;
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: 0.3rem 0.4rem 0.3rem 0.7rem;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: var(--bg-overlay);
-  backdrop-filter: blur(8px);
-  color: var(--text-faint);
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  cursor: pointer;
-  transition: color 0.15s var(--ease), border-color 0.15s var(--ease);
-}
-
-.hero__scene-btn:hover {
-  color: var(--accent);
-  border-color: var(--accent-line);
-}
-
-.hero__scene-btn kbd {
-  padding: 0.05rem 0.35rem;
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-sm);
-  font: inherit;
-  color: var(--text-muted);
-}
-
-@media (max-width: 46rem) {
-  .hero__scene-btn {
-    right: var(--space-4);
-  }
-
-  .hero__scene-btn kbd {
-    display: none;
+  /* The contact copy is a short column rather than a full headline block, so
+     the corridor can come up sooner. */
+  .contact__scene::after {
+    background:
+      linear-gradient(97deg, var(--bg) 2%, rgba(11, 11, 13, 0.84) 24%, rgba(11, 11, 13, 0.04) 100%),
+      linear-gradient(to bottom, var(--bg) 0%, rgba(11, 11, 13, 0) 16%, rgba(11, 11, 13, 0) 80%, var(--bg) 100%);
   }
 }
 
@@ -754,12 +751,15 @@
 /* ---------- Contact ---------- */
 
 .contact {
+  position: relative;
+  overflow: hidden;
   padding-block: var(--space-9);
 }
 
 /* Same 1.2 / 0.8 split as the hero, so the clip lands at roughly its native
    400 px and stays sharp. */
 .contact__grid {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
   gap: var(--space-7);
