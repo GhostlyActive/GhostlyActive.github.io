@@ -29,7 +29,7 @@
 .site-nav__logo {
   width: 34px;
   height: 34px;
-  border-radius: 9px;
+  border-radius: 50%;
   flex-shrink: 0;
   transition: transform 0.2s var(--ease);
 }

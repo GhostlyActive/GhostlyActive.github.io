@@ -40,7 +40,7 @@ assets/
   js/reveal.js             Fade-up on first scroll into view
   img/projects/            Stills and MP4 loops pulled from the project repositories
   img/video/               YouTube poster frames, one per video ID
-  logo.svg                 Jellyfish mark — nav logo and favicon
+  logo.svg                 Round jellyfish mark — nav logo and favicon
   logo-alt.svg             Earlier variant, swimming upward
   logo-symmetric.svg       Earlier variant, symmetric fan
 ```
@@ -152,13 +152,16 @@ that would make a useless filter of its own (`TCP`, `IO-Link`, `avr_boot`).
 
 ## The logo
 
-`assets/logo.svg` is a vector jellyfish knocked out of an orange tile in the site accent (`#ffa62b`),
-drawn after a reference photo: bell at the bottom, tentacles streaming up, the posture of an animal
-swimming downward. One file serves as both the 34 px nav mark and the favicon. It is vector because
-a photo cutout turns to mush at 16 px.
+`assets/logo.svg` is a round mark drawn after a reference photo of a jellyfish: magenta bell at the
+top, oral arms and tentacles trailing down and out through the edge of a deep-blue disc. It is the
+photograph redrawn rather than cropped, because a photo cutout turns to mush at 16 px — this stays
+sharp as both the 34 px nav mark and the favicon. Everything is clipped to `circle(32 32 32)`, so
+whatever leaves the disc is simply cut off.
 
-Two earlier variants sit beside it. To switch, swap the filename in `<link rel="icon">` and
-`.site-nav__logo` in `index.html` and all seven project pages.
+Two earlier variants sit beside it, both built the other way round — bell at the bottom, tentacles
+streaming up. To switch, swap the filename in `<link rel="icon">` and `.site-nav__logo` in
+`index.html` and all seven project pages.
 
-All three hard-code their two hex values, since a standalone SVG cannot read CSS custom properties —
-so if the accent changes in `tokens.css`, update the tile fill and the knockout to match.
+Colours are hard-coded, since a standalone SVG cannot read CSS custom properties. The mark is the
+one place on the site that is not in the amber palette; if that ever has to match `tokens.css`, the
+`bell` and `sea` gradients are what to change.
