@@ -36,7 +36,7 @@
    * fill spans of pixels directly — thousands of `fillRect` calls a frame would
    * not hold 60 fps.
    */
-  function createPixelBuffer(pixelSize) {
+  function createPixelBuffer() {
     const surface = document.createElement("canvas");
     const context = surface.getContext("2d");
     let image = null;
@@ -47,8 +47,13 @@
       pixels: null,
 
       resize(cssWidth, cssHeight) {
-        this.width = Math.max(2, Math.round(cssWidth / pixelSize));
-        this.height = Math.max(2, Math.round(cssHeight / pixelSize));
+        // A three-pixel block reads as texture across a 1200 px hero and as a
+        // staircase across a 375 px phone, where the same block also covers
+        // three times as many device pixels. Narrow canvases get a finer grid —
+        // and stay cheaper than the desktop even so, because they are smaller.
+        const block = cssWidth < 640 ? 2 : 3;
+        this.width = Math.max(2, Math.round(cssWidth / block));
+        this.height = Math.max(2, Math.round(cssHeight / block));
         surface.width = this.width;
         surface.height = this.height;
         image = context.createImageData(this.width, this.height);
@@ -72,7 +77,7 @@
 
     const altitude = new Uint8Array(MAP * MAP);
     const surface = new Uint32Array(MAP * MAP);
-    const buffer = createPixelBuffer(3);
+    const buffer = createPixelBuffer();
 
     let sky = null;
     let hidden = null;
@@ -235,7 +240,7 @@
     const FOG = [12, 12, 15];
 
     const world = new Uint8Array(MAP * MAP);
-    const buffer = createPixelBuffer(3);
+    const buffer = createPixelBuffer();
 
     let ceiling = null;
 

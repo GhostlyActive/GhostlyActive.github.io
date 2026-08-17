@@ -102,9 +102,11 @@ a {
   opacity: 0;
 }
 
+/* No fill mode, and reveal.js drops both classes once the animation has played
+   — the element must not spend the rest of the session depending on it. */
 .js .reveal.is-visible {
   opacity: 1;
-  animation: reveal-up 0.55s var(--ease) backwards;
+  animation: reveal-up 0.55s var(--ease);
 }
 
 @keyframes reveal-up {

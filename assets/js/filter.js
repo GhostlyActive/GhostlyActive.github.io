@@ -26,6 +26,9 @@ function buildBar(bar) {
     cards.some((card) => readTopics(card).includes(topic)),
   );
 
+  bar.setAttribute("role", "group");
+  bar.setAttribute("aria-label", `Filter ${label} by topic`);
+
   const status = document.createElement("p");
   status.className = "visually-hidden";
   status.setAttribute("role", "status");
