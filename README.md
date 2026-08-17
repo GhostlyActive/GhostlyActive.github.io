@@ -40,6 +40,8 @@ assets/
   js/reveal.js             Fade-up on first scroll into view
   img/projects/            Stills and MP4 loops pulled from the project repositories
   img/video/               YouTube poster frames, one per video ID
+  img/og-image.jpg         1200 × 630 link preview — see below
+  apple-touch-icon.png     180 × 180, iOS home screen
   logo.svg                 Round jellyfish mark — nav logo and favicon
 ```
 
@@ -116,6 +118,20 @@ future clip that is not near the top of its page.
 The hero clip is `ghost-pixel-lab-flight.mp4`, 400 × 224 native and displayed around 434 px wide —
 near enough to 1:1 to stay sharp. A larger source is fine; a smaller one will look soft.
 
+## Link previews
+
+`img/og-image.jpg` is what WhatsApp, LinkedIn, Slack and the rest show when someone posts the URL.
+It is 1200 × 630 because those cards crop to roughly 1.91:1 — a portrait image loses everything but
+a strip out of its middle. The background is the real terrain renderer, screenshotted out of a page
+that loads `scenes.js`, so the preview and the hero show the same world.
+
+The `og:` URLs are the only absolute paths on the site. Everything else is relative so the site
+works from any sub-path, but a scraper has no document to resolve a relative path against, and a
+good number of them drop the image without saying so.
+
+Only `index.html` carries these tags. A shared project page falls back to its `<title>` and
+description with no image.
+
 ## The canvas scenes
 
 `scenes.js` draws a background behind two sections. A `<canvas data-scene="…">` inside a `.scene`
@@ -155,6 +171,15 @@ top, oral arms and tentacles trailing down and out through the edge of a deep-bl
 photograph redrawn rather than cropped, because a photo cutout turns to mush at 16 px — this stays
 sharp as both the 34 px nav mark and the favicon. Everything is clipped to `circle(32 32 32)`, so
 whatever leaves the disc is simply cut off.
+
+`apple-touch-icon.png` is the same drawing without the circular clip, because iOS rounds the corners
+itself and would fill a transparent margin with black. Both it and the share image are rendered from
+the site's own markup with headless Chrome:
+
+```bash
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless --disable-gpu \
+  --window-size=1200,630 --screenshot=out.png file://$PWD/page.html
+```
 
 Colours are hard-coded, since a standalone SVG cannot read CSS custom properties. The mark is the
 one place on the site that is not in the amber palette; if that ever has to match `tokens.css`, the
