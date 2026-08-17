@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ghost Pixel Lab — GhostlyActive</title>
+<meta name="description" content="A pocket AMOLED computer on the ESP32-S3: a Commodore 64 you program in BASIC, an Outer-Wilds-style space sim with voxel terrain, and a dozen hardware experiments.">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/tokens.css">
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/site.css">
+<link rel="stylesheet" href="../assets/css/project.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<svg class="visually-hidden" aria-hidden="true" focusable="false">
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></symbol>
+</svg>
+
+<nav class="site-nav">
+  <div class="shell site-nav__inner">
+    <a class="site-nav__brand" href="../index.html">
+      <img class="site-nav__logo" src="../assets/logo.svg" alt="" width="34" height="34">
+      <span class="site-nav__names">
+        <span class="site-nav__name">GhostlyActive</span>
+        <span class="site-nav__sub">Marlon</span>
+      </span>
+    </a>
+    <ul class="site-nav__links">
+      <li><a href="../index.html#builds">Builds</a></li>
+      <li><a href="../index.html#studio">Work &amp; experiments</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="main">
+  <div class="shell">
+
+    <header class="project-header">
+      <a class="back-link" href="../index.html#builds">← All builds</a>
+      <p class="project-header__kicker">Own build · 2026</p>
+      <h1>Ghost Pixel Lab</h1>
+      <p class="project-header__lede">
+        A pocket computer on a 1.8-inch AMOLED panel. It boots into a touch launcher holding two
+        headline apps — a Commodore 64 you program in BASIC, and an Outer-Wilds-style space sim
+        that lands you on procedural voxel terrain — plus a dozen smaller hardware experiments.
+      </p>
+      <div class="project-header__actions">
+        <a class="btn btn--primary" href="https://github.com/GhostlyActive/Ghost-Pixel-Lab" rel="noopener">View source</a>
+        <a class="btn" href="https://www.youtube.com/watch?v=ePTqaHAo_ig" rel="noopener">Watch on YouTube</a>
+      </div>
+    </header>
+
+    <dl class="specs">
+      <div><dt>MCU</dt><dd>ESP32-S3R8 · 240 MHz · 8 MB PSRAM</dd></div>
+      <div><dt>Display</dt><dd>SH8601 AMOLED · 368 × 448 · QSPI</dd></div>
+      <div><dt>Language</dt><dd>Modern C++</dd></div>
+      <div><dt>Toolchain</dt><dd>PlatformIO</dd></div>
+      <div><dt>Status</dt><dd>Active sandbox</dd></div>
+    </dl>
+
+    <div class="media-block">
+      <figure class="figure">
+        <video src="../assets/img/projects/ghost-pixel-lab-flight.mp4"
+               poster="../assets/img/projects/ghost-pixel-lab-flight.jpg"
+               autoplay muted loop playsinline preload="metadata"
+               aria-label="Flying the ship between orbiting planets in Outer Pixels"></video>
+        <figcaption>Outer Pixels: flying between orbiting bodies. Everything is drawn by hand — there is no 3D engine on the board.</figcaption>
+      </figure>
+    </div>
+
+    <div class="prose">
+
+      <h2>The machine underneath</h2>
+      <p>
+        Before any of the apps existed there had to be something to run them on. The engine layer
+        provides a touch launcher, a double-buffered DMA renderer, a sound mixer with MP3 playback,
+        storage, and Wi-Fi/BLE — with a single <code>App</code> interface that every experiment
+        implements.
+      </p>
+      <p>
+        Files live under <code>/GHOST</code> on the SD card, or on internal flash when no card is
+        present. <code>core::files</code> picks whichever is available at boot and every app shares
+        the same layout, so an app never needs to know which one it got.
+      </p>
+
+      <div class="data-table">
+        <table>
+          <caption class="visually-hidden">Hardware on the Waveshare ESP32-S3-Touch-AMOLED-1.8 board</caption>
+          <thead>
+            <tr><th scope="col">Part</th><th scope="col">Role</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>ESP32-S3R8</td><td>240 MHz, 8 MB octal PSRAM, 16 MB flash, Wi-Fi 4 + BLE 5</td></tr>
+            <tr><td>SH8601</td><td>1.8" AMOLED, 368 × 448, QSPI</td></tr>
+            <tr><td>FT3168</td><td>Capacitive touch</td></tr>
+            <tr><td>QMI8658</td><td>6-axis IMU — gyroscope and accelerometer</td></tr>
+            <tr><td>ES8311</td><td>Mono audio codec, speaker and MEMS microphone</td></tr>
+            <tr><td>AXP2101</td><td>Power management, LiPo charging, battery telemetry</td></tr>
+            <tr><td>PCF85063</td><td>Real-time clock with backup-battery pads</td></tr>
+            <tr><td>TCA9554</td><td>8-bit I/O expander driving the LCD and touch resets</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Ghost BASIC</h2>
+      <p>
+        A Commodore 64 in spirit, not an emulator. A 40 × 25 PETSCII screen with its own hand-drawn
+        8 × 8 font, the authentic screen editor — cursor up to an old line, change it, press RETURN
+        and it is re-entered — and a BASIC V2-flavoured interpreter, down to the original error
+        messages.
+      </p>
+      <p>
+        You type on a Bluetooth-LE keyboard paired through the BLE Scan app, or on the USB serial
+        console when no keyboard is around. Programs <code>SAVE</code> and <code>LOAD</code> against
+        <code>/GHOST/BASIC</code>, and <code>DIRECTORY</code> lists what is there.
+      </p>
+
+      <h2>Outer Pixels</h2>
+      <p>
+        The headline app, and the one in the video above: a 6-DOF ship flown between orbiting
+        planets. Drop low enough and the renderer switches from the space view to a Comanche-style
+        <strong>voxel terrain</strong> you fly through — generated procedurally in the background so
+        the transition is seamless rather than a loading screen.
+      </p>
+      <p>
+        There are three ways to fly it. An Xbox pad over BLE is the full experience. Without one,
+        holding a finger on the screen steers and acts as the throttle, and lifting it brakes the
+        ship to a stop. A keyboard works too: arrows steer, <code>Q</code>/<code>E</code> roll,
+        <code>W</code>/<code>S</code> thrust and brake, <code>A</code> picks the planet under the
+        crosshair.
+      </p>
+
+      <div class="media-block media-block--wide">
+        <div class="gallery">
+          <figure class="figure">
+            <video src="../assets/img/projects/ghost-pixel-lab-terrain.mp4"
+                   poster="../assets/img/projects/ghost-pixel-lab-terrain.jpg"
+                   muted loop playsinline preload="none" controls
+                   aria-label="Flying low over procedurally generated voxel terrain"></video>
+            <figcaption>Dropping to the surface: the space renderer hands over to the voxel terrain renderer.</figcaption>
+          </figure>
+          <figure class="figure">
+            <img src="../assets/img/projects/ghost-pixel-lab-surface.jpg" alt="The AMOLED panel showing the voxel surface renderer in flight" loading="lazy" decoding="async">
+            <figcaption>The panel photographed directly — 368 × 448 pixels of AMOLED, no filter.</figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <h2>Everything else</h2>
+      <p>
+        Behind <em>Others</em> in the launcher sits the pile of experiments the board exists for:
+        <strong>BLE Scan</strong> (find and pair a Bluetooth keyboard), <strong>Disk</strong>
+        (storage info and format), <strong>Cube 3D</strong> (an IMU-driven wireframe),
+        <strong>Sensor Lab</strong> (hardware dashboard), <strong>Echo</strong> (microphone straight
+        to speaker), <strong>Piano</strong> (touch synth), <strong>Sand</strong> (falling sand with
+        tilt), <strong>Maze Ball</strong>, <strong>Level</strong> (spirit level),
+        <strong>Music</strong> (MP3 from flash and SD), <strong>WiFi Scan</strong>, and
+        <strong>Pad Lab</strong> (Xbox controller over BLE, rumble included).
+      </p>
+
+    </div>
+
+    <div class="media-block">
+      <h2 class="visually-hidden">Video</h2>
+      <button class="video" type="button" data-video-id="ePTqaHAo_ig" data-video-title="Outer Pixels — Pocket Space Game">
+        <img src="../assets/img/video/ePTqaHAo_ig.jpg" alt="Outer Pixels running on the handheld AMOLED board" loading="lazy" decoding="async">
+        <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
+        <span class="video__duration">1:10</span>
+        <span class="visually-hidden">Play video: Outer Pixels — Pocket Space Game</span>
+      </button>
+    </div>
+
+    <nav class="pager" aria-label="More projects">
+      <a href="ghost-engine-3d.html"><span>← Previous</span><strong>Ghost Engine 3D</strong></a>
+      <a href="ghost-morse-telegraph.html"><span>Next →</span><strong>Ghost Morse Telegraph</strong></a>
+    </nav>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="shell site-footer__inner">
+    <span>© 2026 GhostlyActive · Marlon</span>
+    <span><a href="../index.html">Back to the portfolio</a></span>
+  </div>
+</footer>
+
+<script src="../assets/js/video.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GhostlyActive — Marlon, Software Engineer</title>
+<meta name="description" content="Software engineer for interactive installations and real-time 3D: museum exhibits, augmented reality and virtual production, plus renderers and firmware written from scratch.">
+<meta name="color-scheme" content="dark">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="GhostlyActive — Marlon, Software Engineer">
+<meta property="og:description" content="Interactive installations, augmented reality and real-time 3D — plus renderers and firmware written from scratch.">
+<meta property="og:image" content="assets/img/projects/ghost-pixel-lab-space.jpg">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<svg class="visually-hidden" aria-hidden="true" focusable="false">
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></symbol>
+</svg>
+
+<nav class="site-nav">
+  <div class="shell site-nav__inner">
+    <a class="site-nav__brand" href="#top">
+      <img class="site-nav__logo" src="assets/logo.svg" alt="" width="34" height="34">
+      <span class="site-nav__names">
+        <span class="site-nav__name">GhostlyActive</span>
+        <span class="site-nav__sub">Marlon</span>
+      </span>
+    </a>
+    <ul class="site-nav__links">
+      <li><a href="#builds">Builds</a></li>
+      <li><a href="#studio">Work &amp; experiments</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="main">
+
+  <header class="hero" id="top">
+    <div class="shell">
+      <div class="hero__inner">
+        <div>
+          <h1>Software engineer for <em>interactive systems</em> — from 8 KB of SRAM to Unreal Engine 5.</h1>
+          <p class="hero__lede">
+            I build museum exhibits, expo applications and augmented reality — apps that let a
+            visitor hold up an iPad and see virtual elements placed in the real room. Unity and
+            Unreal on the surface, Arduino and Raspberry Pi boards, sensors and LED controllers
+            underneath. My background is electrical engineering, which is why my own projects run
+            further down the stack: renderers and firmware written from scratch.
+          </p>
+
+          <div class="hero__actions">
+            <a class="btn btn--primary" href="#builds">Own builds</a>
+            <a class="btn" href="#studio">Work &amp; experiments</a>
+            <a class="btn" href="https://github.com/GhostlyActive" rel="noopener">GitHub</a>
+            <a class="btn" href="https://www.youtube.com/channel/UC-lTk973ekuhM_iHE4gxODw/videos" rel="noopener">YouTube</a>
+          </div>
+        </div>
+
+        <figure class="media-panel">
+          <video src="assets/img/projects/ghost-pixel-lab-flight.mp4"
+                 poster="assets/img/projects/ghost-pixel-lab-flight.jpg"
+                 autoplay muted loop playsinline preload="metadata"
+                 aria-label="Outer Pixels: flying between orbiting planets, rendered on a 1.8-inch AMOLED panel"></video>
+          <figcaption>
+            <strong>Outer Pixels</strong> — a space sim on an ESP32-S3, drawn without a 3D engine.
+            368 × 448 AMOLED, filmed off the panel.
+            <a href="projects/ghost-pixel-lab.html">How it works →</a>
+          </figcaption>
+        </figure>
+      </div>
+
+      <dl class="hero__facts">
+        <div class="hero__fact">
+          <dt>Focus</dt>
+          <dd>Interactive installations, AR, real-time 3D</dd>
+        </div>
+        <div class="hero__fact">
+          <dt>Background</dt>
+          <dd>Electrical engineering</dd>
+        </div>
+        <div class="hero__fact">
+          <dt>Languages</dt>
+          <dd>C++, C#, Python</dd>
+        </div>
+        <div class="hero__fact">
+          <dt>Engines</dt>
+          <dd>Unity, Unreal Engine 5, DirectX, raylib</dd>
+        </div>
+        <div class="hero__fact">
+          <dt>Hardware</dt>
+          <dd>ESP32, Arduino, Raspberry Pi, iPad / ARKit</dd>
+        </div>
+      </dl>
+    </div>
+  </header>
+
+  <!-- ==================== OWN PROJECTS ==================== -->
+
+  <section class="section" id="builds">
+    <div class="shell">
+      <div class="section__head">
+        <span class="section__index">01 — Own builds</span>
+        <h2>Things I built to find out how they work</h2>
+        <p>
+          Seven projects where the part that matters is written rather than imported: the renderer,
+          the world model, the firmware. No game engine anywhere, and on the microcontroller builds
+          no operating system either. Every one of them has source on GitHub.
+        </p>
+      </div>
+
+      <div class="work-grid">
+
+        <article class="work-card">
+          <div class="work-card__media">
+            <img src="assets/img/projects/ghost-pixel-lab-space.jpg" alt="Outer Pixels running on the 1.8-inch AMOLED: two planets lit against an amber sky" loading="lazy" decoding="async">
+            <span class="work-card__year">2026</span>
+          </div>
+          <div class="work-card__body">
+            <p class="work-card__kicker">ESP32-S3 · Modern C++</p>
+            <h3 class="work-card__title"><a href="projects/ghost-pixel-lab.html">Ghost Pixel Lab</a></h3>
+            <p class="work-card__desc">
+              A pocket computer on a 368 × 448 AMOLED: a Commodore 64 you program in BASIC, an
+              Outer-Wilds-style space sim with procedural voxel terrain, and a dozen hardware
+              experiments behind a touch launcher.
+            </p>
+            <ul class="tag-row">
+              <li class="tag tag--accent">C++17</li>
+              <li class="tag">ESP32-S3</li>
+              <li class="tag">AMOLED / QSPI</li>
+              <li class="tag">BASIC interpreter</li>
+            </ul>
+            <div class="work-card__foot">
+              <span>Sandbox · active</span>
+              <span class="work-card__more">Read more →</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="work-card">
+          <div class="work-card__media">
+            <img src="assets/img/projects/ghost-morse-telegraph-build.jpg" alt="The finished telegraph in a wooden box, OLED showing Ghost Morse" loading="lazy" decoding="async">
+            <span class="work-card__year">2026</span>
+          </div>
+          <div class="work-card__body">
+            <p class="work-card__kicker">Arduino Uno · C++</p>
+            <h3 class="work-card__title"><a href="projects/ghost-morse-telegraph.html">Ghost Morse Telegraph</a></h3>
+            <p class="work-card__desc">
+              One solenoid used in both directions: press the plunger to key a message into the
+              Arduino, and after seven seconds of silence the same coil taps it back out, as if
+              moved by a ghost's hand.
+            </p>
+            <ul class="tag-row">
+              <li class="tag tag--accent">C++</li>
+              <li class="tag">Solenoid / TIP120</li>
+              <li class="tag">State machine</li>
+              <li class="tag">SSD1351</li>
+            </ul>
+            <div class="work-card__foot">
+              <span>Hardware build</span>
+              <span class="work-card__more">Read more →</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="work-card">
+          <div class="work-card__media">
+            <img src="assets/img/projects/voxel-terraformer-1.jpg" alt="A green voxel hill with a rocky peak under a blue sky" loading="lazy" decoding="async">
+            <span class="work-card__year">2026</span>
+          </div>
+          <div class="work-card__body">
+            <p class="work-card__kicker">C# · raylib</p>
+            <h3 class="work-card__title"><a href="projects/voxel-terraformer.html">VoxelTerraformer</a></h3>
+            <p class="work-card__desc">
+              A chunk-based voxel world with real-time terraforming. Precise voxel raycasting picks
+              the block under the cursor, so placing and removing geometry stays exact at any
+              distance.
+            </p>
+            <ul class="tag-row">
+              <li class="tag tag--accent">C#</li>
+              <li class="tag">raylib</li>
+              <li class="tag">Chunked world</li>
+            </ul>
+            <div class="work-card__foot">
+              <span>Technical sandbox</span>
+              <span class="work-card__more">Read more →</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="work-card">
+          <div class="work-card__media">
+            <img src="assets/img/projects/voxel-pi-graphics.jpg" alt="VoxelSpace terrain with a stepped pyramid rendered on the Raspberry Pi" loading="lazy" decoding="async">
+            <span class="work-card__year">2023</span>
+          </div>
+          <div class="work-card__body">
+            <p class="work-card__kicker">Python · Raspberry Pi</p>
+            <h3 class="work-card__title"><a href="projects/voxel-pi.html">VoxelPi</a></h3>
+            <p class="work-card__desc">
+              The Comanche VoxelSpace algorithm — height map plus colour map, drawn back to front in
+              vertical columns — reimplemented in Python and Pygame, tuned to stay playable on a
+              Raspberry Pi.
+            </p>
+            <ul class="tag-row">
+              <li class="tag tag--accent">Python</li>
+              <li class="tag">Pygame</li>
+              <li class="tag">Raspberry Pi</li>
+            </ul>
+            <div class="work-card__foot">
+              <span>Open source</span>
+              <span class="work-card__more">Read more →</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="work-card">
+          <div class="work-card__media">
+            <img src="assets/img/projects/ghost-station-almost-finished.jpg" alt="The Ghost Station board: OLED module, Arduino Nano, SD card reader and yellow arcade buttons" loading="lazy" decoding="async">
+            <span class="work-card__year">2022</span>
+          </div>
+          <div class="work-card__body">
+            <p class="work-card__kicker">Arduino · Custom bootloader</p>
+            <h3 class="work-card__title"><a href="projects/ghost-station.html">Ghost Station</a></h3>
+            <p class="work-card__desc">
+              A cartridge-based console on an Arduino. Swap the SD card, restart, and a custom
+              bootloader flashes the game off the card — complete with a PlayStation-style intro
+              between titles.
+            </p>
+            <ul class="tag-row">
+              <li class="tag tag--accent">C++</li>
+              <li class="tag">avr_boot</li>
+              <li class="tag">SD / SPI</li>
+              <li class="tag">Hardware</li>
+            </ul>
+            <div class="work-card__foot">
+              <span>Console build</span>
+              <span class="work-card__more">Read more →</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="work-card">
+          <div class="work-card__media">
+            <img src="assets/img/projects/ghost-engine-classic-2d-game.jpg" alt="The engine running on a 1.5-inch RGB OLED, individual pixels visible, minimap in the corner" loading="lazy" decoding="async">
+            <span class="work-card__year">2021</span>
+          </div>
+          <div class="work-card__body">
+            <p class="work-card__kicker">Arduino Mega · C++17</p>
+            <h3 class="work-card__title"><a href="projects/ghost-engine-classic-2d.html">Ghost Engine Classic 2D</a></h3>
+            <p class="work-card__desc">
+              Wolfenstein's raycasting and Doom's BSP tree, both running on a 16 MHz AVR with 8 KB
+              of SRAM. Front-to-back traversal plus a per-column occlusion buffer mean nothing is
+              ever drawn twice.
+            </p>
+            <ul class="tag-row">
+              <li class="tag tag--accent">C++17</li>
+              <li class="tag">AVR / 8 KB SRAM</li>
+              <li class="tag">BSP</li>
+              <li class="tag">Raycasting</li>
+            </ul>
+            <div class="work-card__foot">
+              <span>Grew out of my bachelor thesis</span>
+              <span class="work-card__more">Read more →</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="work-card">
+          <div class="work-card__media">
+            <img src="assets/img/projects/ghost-engine-3d-light.jpg" alt="A lit temple model rendered in the engine, with ImGui panels for light and camera" loading="lazy" decoding="async">
+            <span class="work-card__year">2021</span>
+          </div>
+          <div class="work-card__body">
+            <p class="work-card__kicker">DirectX 11 · Win32</p>
+            <h3 class="work-card__title"><a href="projects/ghost-engine-3d.html">Ghost Engine 3D</a></h3>
+            <p class="work-card__desc">
+              A 3D engine written from scratch against the raw Windows API: swap chain, vertex and
+              index buffers, shaders, depth buffer, <code>.obj</code> import, lighting and an ImGui
+              tool layer.
+            </p>
+            <ul class="tag-row">
+              <li class="tag tag--accent">C++</li>
+              <li class="tag">DirectX 11</li>
+              <li class="tag">Win32</li>
+              <li class="tag">ImGui</li>
+            </ul>
+            <div class="work-card__foot">
+              <span>Engine from scratch</span>
+              <span class="work-card__more">Read more →</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CLIENT WORK & EXPERIMENTS ==================== -->
+
+  <section class="section" id="studio">
+    <div class="shell">
+      <div class="section__head">
+        <span class="section__index">02 — Client work &amp; experiments</span>
+        <h2>Interactive installations, AR and virtual production</h2>
+        <p>
+          A mix of client projects and pieces I built to learn a tool properly. Museum exhibits and
+          expo applications, augmented reality on iPad, an arcade racer, game demos and face tracking
+          in Unreal Engine, virtual production against a greenscreen, and rendered landscapes — made
+          with Unity, Unreal Engine, and the microcontrollers that drive the hardware behind them.
+        </p>
+      </div>
+
+      <div class="reel-grid">
+
+        <article class="reel-card">
+          <button class="video" type="button" data-video-id="2eatbBkr9Xw" data-video-title="Expo 2025 — AR Cooperative Multiplayer">
+            <img src="assets/img/video/2eatbBkr9Xw.jpg" alt="Three iPads showing a shared augmented-reality scene on a wooden table" loading="lazy" decoding="async">
+            <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
+            <span class="video__duration">1:44</span>
+            <span class="visually-hidden">Play video: Expo 2025 — AR Cooperative Multiplayer</span>
+          </button>
+          <div class="reel-card__body">
+            <h3>Expo 2025 — AR Cooperative Multiplayer</h3>
+            <p>
+              Three iPads share one tracked physical model. The game works solo or with two other
+              players, and anyone can join the running session at any point.
+            </p>
+            <ul class="tag-row">
+              <li class="tag tag--cyan">Unity</li>
+              <li class="tag">Model tracking</li>
+              <li class="tag">Multiplayer</li>
+            </ul>
+            <p class="reel-card__meta">Osaka · Nov 2025</p>
+          </div>
+        </article>
+
+        <article class="reel-card">
+          <button class="video" type="button" data-video-id="iVWfP9RTawk" data-video-title="BMW Mini Arcade Mobile">
+            <img src="assets/img/video/iVWfP9RTawk.jpg" alt="Retro arcade racing game running on a phone next to the desktop version" loading="lazy" decoding="async">
+            <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
+            <span class="video__duration">2:00</span>
+            <span class="visually-hidden">Play video: BMW Mini Arcade Mobile</span>
+          </button>
+          <div class="reel-card__body">
+            <h3>BMW Mini Arcade Mobile</h3>
+            <p>
+              A retro arcade racer shipped as WebGL and embedded directly into the BMW Welt app —
+              the mobile follow-up to the physical arcade cabinet.
+            </p>
+            <ul class="tag-row">
+              <li class="tag tag--cyan">Unity</li>
+              <li class="tag">WebGL</li>
+              <li class="tag">Mobile</li>
+            </ul>
+            <p class="reel-card__meta">BMW Welt · Apr 2025</p>
+          </div>
+        </article>
+
+        <article class="reel-card">
+          <button class="video" type="button" data-video-id="I-iDyr4fyKo" data-video-title="Museum Exhibition — Senckenberg">
+            <img src="assets/img/video/I-iDyr4fyKo.jpg" alt="Museum exhibit with a dinosaur skeleton and an interactive screen installation" loading="lazy" decoding="async">
+            <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
+            <span class="video__duration">1:05</span>
+            <span class="visually-hidden">Play video: Museum Exhibition — Senckenberg</span>
+          </button>
+          <div class="reel-card__body">
+            <h3>Museum Exhibition — Senckenberg</h3>
+            <p>
+              A travelling exhibition, here at the Senckenberg Museum in Frankfurt. The stations run
+              on Unity; the physical buttons on the exhibit talk to them over IO-Link.
+            </p>
+            <ul class="tag-row">
+              <li class="tag tag--cyan">Unity</li>
+              <li class="tag">IO-Link</li>
+              <li class="tag">Installation</li>
+            </ul>
+            <p class="reel-card__meta">Frankfurt · Feb 2024</p>
+          </div>
+        </article>
+
+        <article class="reel-card">
+          <button class="video" type="button" data-video-id="XtH-58Kl0m8" data-video-title="AR Wall">
+            <img src="assets/img/video/XtH-58Kl0m8.jpg" alt="An iPad held up to a pink printed wall graphic, playing a video overlay" loading="lazy" decoding="async">
+            <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
+            <span class="video__duration">1:07</span>
+            <span class="visually-hidden">Play video: AR Wall</span>
+          </button>
+          <div class="reel-card__body">
+            <h3>AR Wall</h3>
+            <p>
+              Image tracking on an iPad Pro recognises printed wall graphics and launches
+              transparent video overlays in place on top of them.
+            </p>
+            <ul class="tag-row">
+              <li class="tag tag--cyan">AR Foundation</li>
+              <li class="tag">ARKit</li>
+              <li class="tag">Image tracking</li>
+            </ul>
+            <p class="reel-card__meta">Sep 2023</p>
+          </div>
+        </article>
+
+        <article class="reel-card">
+          <button class="video" type="button" data-video-id="dIcUQG9apzw" data-video-title="AR Car &amp; Dynamic UI">
+            <img src="assets/img/video/dIcUQG9apzw.jpg" alt="A car model with an augmented-reality overlay highlighting the brake system" loading="lazy" decoding="async">
+            <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
+            <span class="video__duration">1:02</span>
+            <span class="visually-hidden">Play video: AR Car and Dynamic UI</span>
+          </button>
+          <div class="reel-card__body">
+            <h3>AR Car &amp; Dynamic UI</h3>
+            <p>
+              Model tracking with VisionLib rather than AR Foundation's object tracking, so the
+              overlay locks onto the car itself. Physical LEDs are driven in step with the UI.
+            </p>
+            <ul class="tag-row">
+              <li class="tag tag--cyan">Unity</li>
+              <li class="tag">VisionLib</li>
+              <li class="tag">LED control</li>
+            </ul>
+            <p class="reel-card__meta">May 2023</p>
+          </div>
+        </article>
+
+        <article class="reel-card">
+          <button class="video" type="button" data-video-id="quYHQZ7JM2M" data-video-title="AR City &amp; AR Factory">
+            <img src="assets/img/video/quYHQZ7JM2M.jpg" alt="A physical city model on a table with augmented-reality buildings overlaid" loading="lazy" decoding="async">
+            <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
+            <span class="video__duration">1:23</span>
+            <span class="visually-hidden">Play video: AR City and AR Factory</span>
+          </button>
+          <div class="reel-card__body">
+            <h3>AR City &amp; AR Factory</h3>
+            <p>
+              VisionLib model tracking on iPad, registered against two different physical models —
+              a city and a factory — each carrying its own overlay content.
+            </p>
+            <ul class="tag-row">
+              <li class="tag tag--cyan">Unity</li>
+              <li class="tag">VisionLib</li>
+              <li class="tag">iPad</li>
+            </ul>
+            <p class="reel-card__meta">Nov 2022</p>
+          </div>
+        </article>
+
+        <article class="reel-card">
+          <button class="video" type="button" data-video-id="TDHg5-w709Q" data-video-title="Gravity Bang Bang">
+            <img src="assets/img/video/TDHg5-w709Q.jpg" alt="A sun rising over a dark planet in a space demo" loading="lazy" decoding="async">
+            <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
+            <span class="video__duration">1:08</span>
+            <span class="visually-hidden">Play video: Gravity Bang Bang</span>
+          </button>
+          <div class="reel-card__body">
+            <h3>Gravity Bang Bang</h3>
+            <p>
+              A space demo with directional gravity and a universe that keeps moving — you walk
+              around bodies rather than on a flat plane.
+            </p>
+            <ul class="tag-row">
+              <li class="tag tag--cyan">Unreal Engine 5</li>
+              <li class="tag">Physics</li>
+            </ul>
+            <p class="reel-card__meta">Jul 2022</p>
+          </div>
+        </article>
+
+        <article class="reel-card">
+          <button class="video" type="button" data-video-id="3f1-CgpEXHA" data-video-title="Shoot Bang Bang">
+            <img src="assets/img/video/3f1-CgpEXHA.jpg" alt="First-person view in a bright sci-fi corridor with a floating pickup" loading="lazy" decoding="async">
+            <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
+            <span class="video__duration">1:32</span>
+            <span class="visually-hidden">Play video: Shoot Bang Bang</span>
+          </button>
+          <div class="reel-card__body">
+            <h3>Shoot Bang Bang</h3>
+            <p>
+              Built on Unreal's Lyra starter game: characters spawn with random City Sample crowd
+              meshes and drop a healing item when they die. There is also a cow rocket launcher.
+            </p>
+            <ul class="tag-row">
+              <li class="tag tag--cyan">Unreal Engine 5</li>
+              <li class="tag">Lyra</li>
+            </ul>
+            <p class="reel-card__meta">Jun 2022</p>
+          </div>
+        </article>
+
+        <article class="reel-card">
+          <button class="video" type="button" data-video-id="Eeb-kDdDqs4" data-video-title="MetaHuman Avatar with Face Tracking">
+            <img src="assets/img/video/Eeb-kDdDqs4.jpg" alt="A photorealistic digital human presenter on a green background" loading="lazy" decoding="async">
+            <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
+            <span class="video__duration">0:56</span>
+            <span class="visually-hidden">Play video: MetaHuman Avatar with Face Tracking</span>
+          </button>
+          <div class="reel-card__body">
+            <h3>MetaHuman Avatar &amp; Face Tracking</h3>
+            <p>
+              Face tracking from an iPhone driven into a MetaHuman over Live Link, with the
+              speaker's voice recorded in the same pass.
+            </p>
+            <ul class="tag-row">
+              <li class="tag tag--cyan">Unreal Engine</li>
+              <li class="tag">Live Link</li>
+              <li class="tag">MetaHuman</li>
+            </ul>
+            <p class="reel-card__meta">May 2022</p>
+          </div>
+        </article>
+
+        <article class="reel-card">
+          <button class="video" type="button" data-video-id="h_uJESdRn-c" data-video-title="Virtual Production with Camera Tracking">
+            <img src="assets/img/video/h_uJESdRn-c.jpg" alt="A person composited into a virtual city scene in real time" loading="lazy" decoding="async">
+            <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
+            <span class="video__duration">1:12</span>
+            <span class="visually-hidden">Play video: Virtual Production with Camera Tracking</span>
+          </button>
+          <div class="reel-card__body">
+            <h3>Virtual Production — Camera Tracking</h3>
+            <p>
+              Green-screen production with a tracked camera and real-time compositing through
+              Composure, so the virtual background moves correctly with the shot.
+            </p>
+            <ul class="tag-row">
+              <li class="tag tag--cyan">Unreal Engine 5</li>
+              <li class="tag">Composure</li>
+              <li class="tag">Camera tracking</li>
+            </ul>
+            <p class="reel-card__meta">May 2022</p>
+          </div>
+        </article>
+
+        <article class="reel-card">
+          <button class="video" type="button" data-video-id="Zpus85vJg08" data-video-title="Virtual Production — Greenscreen">
+            <img src="assets/img/video/Zpus85vJg08.jpg" alt="A dense virtual city street rendered from above" loading="lazy" decoding="async">
+            <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
+            <span class="video__duration">0:51</span>
+            <span class="visually-hidden">Play video: Virtual Production Greenscreen</span>
+          </button>
+          <div class="reel-card__body">
+            <h3>Virtual Production — Greenscreen</h3>
+            <p>
+              The first pass at virtual production in Unreal Engine 5, shot against a green screen
+              inside the City Sample environment.
+            </p>
+            <ul class="tag-row">
+              <li class="tag tag--cyan">Unreal Engine 5</li>
+              <li class="tag">Compositing</li>
+            </ul>
+            <p class="reel-card__meta">Apr 2022</p>
+          </div>
+        </article>
+
+        <article class="reel-card">
+          <button class="video" type="button" data-video-id="_Zpy3qBULKM" data-video-title="AR Town">
+            <img src="assets/img/video/_Zpy3qBULKM.jpg" alt="A long white architectural model with augmented-reality buildings overlaid" loading="lazy" decoding="async">
+            <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
+            <span class="video__duration">1:18</span>
+            <span class="visually-hidden">Play video: AR Town</span>
+          </button>
+          <div class="reel-card__body">
+            <h3>AR Town</h3>
+            <p>
+              Object tracking against several anchors at once, so the overlay stays registered
+              across the full length of a physical city structure rather than one corner of it.
+            </p>
+            <ul class="tag-row">
+              <li class="tag tag--cyan">Unity</li>
+              <li class="tag">ARKit</li>
+              <li class="tag">Object tracking</li>
+            </ul>
+            <p class="reel-card__meta">Feb 2022</p>
+          </div>
+        </article>
+
+        <article class="reel-card">
+          <button class="video" type="button" data-video-id="QvNvfzzlX60" data-video-title="Monolith Landscape">
+            <img src="assets/img/video/QvNvfzzlX60.jpg" alt="A monolith standing on a golden hillside at dusk" loading="lazy" decoding="async">
+            <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
+            <span class="video__duration">0:44</span>
+            <span class="visually-hidden">Play video: Monolith Landscape</span>
+          </button>
+          <div class="reel-card__body">
+            <h3>Monolith Landscape</h3>
+            <p>
+              Three landscapes built and rendered in Unreal Engine 5 — a study in terrain, lighting
+              and atmosphere rather than interaction.
+            </p>
+            <ul class="tag-row">
+              <li class="tag tag--cyan">Unreal Engine 5</li>
+              <li class="tag">Landscape</li>
+            </ul>
+            <p class="reel-card__meta">Dec 2021</p>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CONTACT ==================== -->
+
+  <section class="contact" id="contact">
+    <div class="shell contact__grid">
+      <div class="contact__body">
+        <h2>Get in touch</h2>
+        <p>
+          Happy to talk through any of these projects in detail — how they were built, what broke
+          along the way, and what I would do differently now.
+        </p>
+        <a class="btn btn--primary" href="mailto:marlontamer@gmail.com">Write me an email</a>
+
+        <ul class="link-list">
+          <li><a href="https://github.com/GhostlyActive" rel="noopener">GitHub<span>@GhostlyActive</span></a></li>
+          <li><a href="https://www.youtube.com/channel/UC-lTk973ekuhM_iHE4gxODw/videos" rel="noopener">YouTube<span>40 project videos</span></a></li>
+          <li><a href="https://www.linkedin.com/in/marlon-t-831b982a4" rel="noopener">LinkedIn<span>marlon-t</span></a></li>
+          <li><a href="mailto:marlontamer@gmail.com">Email<span>marlontamer@gmail.com</span></a></li>
+        </ul>
+      </div>
+
+      <figure class="media-panel">
+        <video src="assets/img/projects/games-collection.mp4"
+               poster="assets/img/projects/games-collection.jpg"
+               data-play-in-view muted loop playsinline preload="none"
+               aria-label="Showreel of Unity and Unreal Engine work: games, MetaHuman, virtual production and real-time 3D scenes"></video>
+        <figcaption>
+          <strong>Games &amp; real-time 3D</strong> — a showreel of Unity and Unreal Engine work:
+          2D and 3D games, MetaHuman, virtual production.
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="shell site-footer__inner">
+    <span>© 2026 GhostlyActive · Marlon</span>
+    <span>Built as a static site · <a href="https://github.com/GhostlyActive" rel="noopener">Source on GitHub</a></span>
+  </div>
+</footer>
+
+<script src="assets/js/video.js" defer></script>
+</body>
+</html>

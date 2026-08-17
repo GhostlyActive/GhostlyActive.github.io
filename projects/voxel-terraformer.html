@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VoxelTerraformer — GhostlyActive</title>
+<meta name="description" content="An experimental voxel engine in C# and raylib: chunk-based terrain, real-time block editing and precise voxel raycasting.">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/tokens.css">
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/site.css">
+<link rel="stylesheet" href="../assets/css/project.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<nav class="site-nav">
+  <div class="shell site-nav__inner">
+    <a class="site-nav__brand" href="../index.html">
+      <img class="site-nav__logo" src="../assets/logo.svg" alt="" width="34" height="34">
+      <span class="site-nav__names">
+        <span class="site-nav__name">GhostlyActive</span>
+        <span class="site-nav__sub">Marlon</span>
+      </span>
+    </a>
+    <ul class="site-nav__links">
+      <li><a href="../index.html#builds">Builds</a></li>
+      <li><a href="../index.html#studio">Work &amp; experiments</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="main">
+  <div class="shell">
+
+    <header class="project-header">
+      <a class="back-link" href="../index.html#builds">← All builds</a>
+      <p class="project-header__kicker">Own build · 2026</p>
+      <h1>VoxelTerraformer</h1>
+      <p class="project-header__lede">
+        An experimental voxel world in C#, focused on chunk-based terrain, real-time terraforming and
+        a clean, extensible architecture. The goal was never a finished game — it is a technical
+        sandbox for working out how voxel engines hold together.
+      </p>
+      <div class="project-header__actions">
+        <a class="btn btn--primary" href="https://github.com/GhostlyActive/VoxelTerraformer" rel="noopener">View source</a>
+      </div>
+    </header>
+
+    <dl class="specs">
+      <div><dt>Language</dt><dd>C#</dd></div>
+      <div><dt>Rendering</dt><dd>raylib</dd></div>
+      <div><dt>World</dt><dd>Chunk-based, procedurally generated</dd></div>
+      <div><dt>Editing</dt><dd>Real-time place and remove</dd></div>
+      <div><dt>Scope</dt><dd>Technical sandbox</dd></div>
+    </dl>
+
+    <div class="media-block">
+      <figure class="figure">
+        <img src="../assets/img/projects/voxel-terraformer-1.jpg" alt="A green voxel hill rising to a rocky, snow-capped peak under a clear blue sky" loading="lazy" decoding="async">
+        <figcaption>Procedurally generated terrain, rendered chunk by chunk.</figcaption>
+      </figure>
+    </div>
+
+    <div class="prose">
+
+      <h2>What it does</h2>
+      <ul>
+        <li>Chunk-based voxel world architecture</li>
+        <li>Real-time block placement and removal</li>
+        <li>Precise voxel raycasting driven by mouse and keyboard</li>
+        <li>Simple procedural terrain generation</li>
+        <li>Clean separation between world logic, rendering and utilities</li>
+      </ul>
+
+      <h2>Why raycasting is the hard part</h2>
+      <p>
+        Placing a block is easy once you know <em>which</em> block the cursor is pointing at, and
+        that is the part that has to be exact. A ray stepped in fixed increments either misses thin
+        geometry or costs far too many samples at distance. The engine instead walks the voxel grid
+        cell by cell, so the block under the crosshair is identified exactly, at any range, and
+        placement lands on the correct adjacent face rather than one voxel off.
+      </p>
+
+      <h2>The architecture is the point</h2>
+      <p>
+        World logic, rendering and utilities are kept strictly apart. The world does not know how it
+        is drawn, and the renderer does not mutate world state. That separation is what makes the
+        chunking tractable: a chunk can be regenerated, remeshed or skipped without any of that
+        leaking into game logic.
+      </p>
+
+      <div class="data-table">
+        <table>
+          <caption class="visually-hidden">Controls</caption>
+          <thead>
+            <tr><th scope="col">Action</th><th scope="col">Input</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Move camera</td><td><code>W</code> <code>A</code> <code>S</code> <code>D</code></td></tr>
+            <tr><td>Look around</td><td>Mouse</td></tr>
+            <tr><td>Remove block</td><td>Left mouse button, or <code>O</code></td></tr>
+            <tr><td>Place block</td><td>Right mouse button, or <code>P</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        raylib was chosen deliberately over a full engine: it hands you a window, an input queue and
+        a draw call, and nothing else. Everything above that — chunk meshing, the terrain generator,
+        the raycast — had to be written, which was the entire point of the exercise.
+      </p>
+
+    </div>
+
+    <div class="media-block media-block--wide">
+      <div class="gallery">
+        <figure class="figure">
+          <img src="../assets/img/projects/voxel-terraformer-2.jpg" alt="A second view of the voxel world showing edited terrain" loading="lazy" decoding="async">
+          <figcaption>Terrain after editing — blocks removed and placed at runtime.</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <nav class="pager" aria-label="More projects">
+      <a href="ghost-morse-telegraph.html"><span>← Previous</span><strong>Ghost Morse Telegraph</strong></a>
+      <a href="voxel-pi.html"><span>Next →</span><strong>VoxelPi</strong></a>
+    </nav>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="shell site-footer__inner">
+    <span>© 2026 GhostlyActive · Marlon</span>
+    <span><a href="../index.html">Back to the portfolio</a></span>
+  </div>
+</footer>
+
+</body>
+</html>

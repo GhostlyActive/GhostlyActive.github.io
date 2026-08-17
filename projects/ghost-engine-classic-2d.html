@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ghost Engine Classic 2D — GhostlyActive</title>
+<meta name="description" content="Wolfenstein's raycasting and Doom's BSP tree running on a 16 MHz Arduino Mega with 8 KB of SRAM: front-to-back traversal, per-column occlusion and a delta-redraw SPI path.">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/tokens.css">
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/site.css">
+<link rel="stylesheet" href="../assets/css/project.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<svg class="visually-hidden" aria-hidden="true" focusable="false">
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></symbol>
+</svg>
+
+<nav class="site-nav">
+  <div class="shell site-nav__inner">
+    <a class="site-nav__brand" href="../index.html">
+      <img class="site-nav__logo" src="../assets/logo.svg" alt="" width="34" height="34">
+      <span class="site-nav__names">
+        <span class="site-nav__name">GhostlyActive</span>
+        <span class="site-nav__sub">Marlon</span>
+      </span>
+    </a>
+    <ul class="site-nav__links">
+      <li><a href="../index.html#builds">Builds</a></li>
+      <li><a href="../index.html#studio">Work &amp; experiments</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="main">
+  <div class="shell">
+
+    <header class="project-header">
+      <a class="back-link" href="../index.html#builds">← All builds</a>
+      <p class="project-header__kicker">Own build · 2021</p>
+      <h1>Ghost Engine Classic 2D</h1>
+      <p class="project-header__lede">
+        A pseudo-3D rendering engine for a 128 × 128 RGB OLED, combining two early-90s techniques:
+        raycasting from <em>Wolfenstein 3D</em> and binary space partitioning from <em>Doom</em>.
+        The whole pipeline runs on an ATmega2560 — 16 MHz, 8 KB of SRAM.
+      </p>
+      <div class="project-header__actions">
+        <a class="btn btn--primary" href="https://github.com/GhostlyActive/Ghost-Engine-Classic-2D" rel="noopener">View source</a>
+        <a class="btn" href="https://www.youtube.com/watch?v=XWTsxJl02wU" rel="noopener">Watch on YouTube</a>
+      </div>
+    </header>
+
+    <dl class="specs">
+      <div><dt>MCU</dt><dd>Arduino Mega 2560 · 16 MHz · 8 KB SRAM</dd></div>
+      <div><dt>Display</dt><dd>SSD1351 RGB OLED · 128 × 128 · hardware SPI</dd></div>
+      <div><dt>Language</dt><dd>C++17 on AVR-GCC</dd></div>
+      <div><dt>Techniques</dt><dd>BSP · Raycasting · Occlusion buffer</dd></div>
+      <div><dt>Origin</dt><dd>Bachelor thesis</dd></div>
+    </dl>
+
+    <div class="media-block">
+      <figure class="figure">
+        <img src="../assets/img/projects/ghost-engine-classic-2d-game.jpg" alt="The engine running on the OLED module: coloured walls in perspective, FPS counter top-left, minimap top-right" loading="lazy" decoding="async">
+        <figcaption>Photographed off the panel at close range — the pixel grid of the 1.5" OLED is the actual resolution the engine renders at.</figcaption>
+      </figure>
+    </div>
+
+    <div class="prose">
+
+      <blockquote>
+        Originally my bachelor thesis on an Arduino Uno. The code now targets a Mega 2560 for
+        headroom, but the algorithms are unchanged.
+      </blockquote>
+
+      <h2>The constraint that shapes everything</h2>
+      <p>
+        8 KB of SRAM does not hold a framebuffer. A 128 × 128 screen at 16 bits per pixel would need
+        32 KB — four times the entire memory of the chip. So there is no back buffer to compose into
+        and blit; every pixel that changes has to be pushed over SPI as it is decided, and the SPI
+        bus is the slowest thing in the loop.
+      </p>
+      <p>
+        That single fact explains every design decision below: the front-to-back traversal exists so
+        no pixel is ever written twice, and the delta redraw exists so unchanged pixels are not
+        written at all.
+      </p>
+
+      <div class="diagram">
+<pre>   Map gen (once)         Per frame
+   --------------         -------------------------------------------
+   BSP subdivide    --&gt;   FOV update -&gt; RenderBSP (front-to-back)
+                                              |
+                                              v
+                                          DrawWall -&gt; DrawSegment
+                                                          |
+                                                          v
+                                                     FillSegment
+                                                          |
+                                                          v
+                                              per-column SPI write</pre>
+      </div>
+
+      <h2>1. Building the map with BSP</h2>
+      <p>
+        The world starts as one square. It is split <code>iteration</code> times, alternating
+        vertical and horizontal cuts, with a ratio constraint that prevents skinny sectors. The
+        leaves of the resulting binary tree are the playable rooms.
+      </p>
+
+      <div class="diagram">
+<pre>   iter 0          iter 1            iter 2
+
+  +--------+      +----+----+       +---+--+----+
+  |        |      |    |    |       |   |  |    |
+  |        |  -&gt;  |    |    |  -&gt;   +---+--+----+
+  |        |      |    |    |       |     |    |
+  |        |      |    |    |       |     +-+--+
+  +--------+      +----+----+       +-----+-+--+</pre>
+      </div>
+
+      <p>
+        Six iterations give <strong>64 leaves</strong>. Each leaf is a 13-byte <code>Container</code>
+        whose derived geometry — centre, edges — comes from <code>constexpr</code> member functions
+        rather than stored fields, so it is recomputed on demand at zero storage cost. A tree node
+        totals 17 bytes. Sectors are then randomly flagged as walls, with the spawn sector forced
+        empty so every wall sits in front of the player at start.
+      </p>
+
+      <h2>2. Front-to-back traversal</h2>
+      <p>
+        This is the <em>Doom</em> trick. The tree is walked once, picking the player's side of the
+        split first at every inner node. Combined with the per-column occlusion buffer in step 4,
+        the engine never z-sorts and never overdraws.
+      </p>
+
+      <div class="diagram">
+<pre>                BSP tree                       Map (top-down)
+
+                   *                           +-----+-----+
+                  / \                          |     |     |
+                 /   \                         |  L  |  R  |
+                L     R                        |     |     |
+               / \   / \                       +--*--+-----+
+              a   b c   d                         player
+
+   Player is on the left side of the root split, so:
+       RenderBSP(L)  -- drawn first into xBuffer
+       RenderBSP(R)  -- drawn second, but already occluded
+   Recursing into L picks the nearer of {a, b} first by the same rule.</pre>
+      </div>
+
+      <p>
+        The split axis at each inner node is recovered from the children's geometry: same X column
+        means a horizontal split, same Y row means a vertical one. No split plane needs to be stored
+        per node — precious bytes saved.
+      </p>
+
+      <h2>3. Projection and FOV clipping</h2>
+      <p>
+        Each visible wall face arrives as two world-space endpoints. They go through a camera
+        transform and a three-plane clip before anything is drawn.
+      </p>
+
+      <div class="diagram">
+<pre>   wall in world :   A *-------------* B
+                                              ^ forward
+   in camera space:                            |
+                              outside left  /  |  inside
+                                          /    |
+                              A *--------/-----* B
+                                       A'
+
+   A is outside the left FOV plane.
+   Linearly interpolate A onto the plane -&gt; A'.
+   A' has the correct depth at the FOV boundary,
+   so the wall does not "stretch into the middle".</pre>
+      </div>
+
+      <div class="data-table">
+        <table>
+          <caption class="visually-hidden">The three clipping half-spaces</caption>
+          <thead>
+            <tr><th scope="col">Plane</th><th scope="col">Inside half-space</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Near plane</td><td><code>depth &gt;= NEAR_PLANE_DEPTH</code></td></tr>
+            <tr><td>Right FOV</td><td><code>lateral &lt;= depth · tan(FOV/2)</code></td></tr>
+            <tr><td>Left FOV</td><td><code>lateral &gt;= −depth · tan(FOV/2)</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        After the clip both endpoints sit inside the visible cone, so the projection is a clean
+        perspective divide: <code>screen_x = w/2 + (lateral / depth) / tan(FOV/2) · (w/2)</code>.
+      </p>
+      <p>
+        <strong>Why clip against all three planes and not just the near plane?</strong> With a
+        near-plane clip alone, a wall edge running past the side of the FOV gets yanked forward to
+        <code>depth = 1</code>. Its line height then blows up to full screen at the edge no matter
+        how far away the wall actually is — the classic "wall in your face" artifact when walking
+        parallel to a wall.
+      </p>
+
+      <h2>4. Per-column drawing and the delta redraw</h2>
+      <p>
+        Three flat 128-element arrays carry the frame, one entry per screen column:
+      </p>
+
+      <div class="data-table">
+        <table>
+          <caption class="visually-hidden">The three per-column buffers</caption>
+          <thead>
+            <tr><th scope="col">Buffer</th><th scope="col">Type</th><th scope="col">Meaning</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>xBuffer[x]</code></td><td>bool</td><td>Column already drawn this frame?</td></tr>
+            <tr><td><code>yBuffer[x]</code></td><td>int</td><td>Line height drawn last frame</td></tr>
+            <tr><td><code>colorBuffer[x]</code></td><td>uint16_t</td><td>RGB565 colour drawn last frame</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        <code>xBuffer</code> is the occlusion list that makes front-to-back rendering pay off:
+      </p>
+
+      <div class="diagram">
+<pre>   one screen column over time:
+
+        wall A (closer)          wall B (farther)
+        ---------------          ----------------
+        FillSegment runs         FillSegment runs
+        xBuffer[x] is false  -&gt;  xBuffer[x] is true
+        paints column            skip column
+        sets xBuffer[x] = true   (already painted by A)</pre>
+      </div>
+
+      <p>
+        <code>yBuffer</code> and <code>colorBuffer</code> then enable the delta redraw. Columns whose
+        height <em>and</em> colour match the previous frame send zero pixels. Only the differing
+        strips at the top and bottom of a shrinking wall — or a single full-column repaint on a
+        colour change — ever reach the bus.
+      </p>
+      <p>
+        Line height is perspective-correct: <code>line_height = WALL_PROJ_SCALE / depth</code>.
+        Across a wall it is <code>1/depth</code>, not <code>depth</code> itself, that is interpolated
+        linearly between the endpoints — the same correction the PlayStation 1 famously skipped,
+        which is why its textures wobble.
+      </p>
+
+      <h2>5. HUD overlays</h2>
+      <p>
+        Two cosmetic overlays are drawn on top of the world each frame, after the column cleanup
+        pass. Each is gated by an <code>#if</code> on its toggle in <code>BSP_Settings.h</code>, so
+        turning one off removes both the data and the call sites at compile time — zero runtime cost
+        when disabled.
+      </p>
+      <ul>
+        <li><strong>FPS counter</strong> — small white digits top-left, refreshed twice a second, always repainted so a wall sliding into the corner cannot half-eat the digits.</li>
+        <li><strong>Minimap</strong> — a 32 × 32 top-down view of the BSP map top-right: walls in their real colour, a white dot for the player, a yellow line for the view direction.</li>
+      </ul>
+
+      <h2>The game on top</h2>
+      <p>
+        Boot opens a two-entry menu. <strong>PLAY</strong> generates a BSP world with randomly
+        coloured walls and drops you into a corner with the map boundary at your back — no enemies,
+        no goal, just walk around and watch the renderer hold up. <strong>RAYCAST</strong> opens the
+        Lode-style raycaster path instead, with its own grid map editor: place walls in a 24 × 24
+        grid, then step into first-person view.
+      </p>
+      <p>
+        Hardware buttons and the serial monitor work in parallel. Holding a button gives continuous
+        motion; each serial keystroke is a single discrete step, which makes debugging a specific
+        frame far easier than trying to hold still with your thumb.
+      </p>
+
+    </div>
+
+    <div class="media-block media-block--wide">
+      <div class="gallery">
+        <figure class="figure">
+          <img src="../assets/img/projects/ghost-engine-classic-2d-scene.jpg" alt="A rendered scene from the engine showing coloured walls receding in perspective" loading="lazy" decoding="async">
+          <figcaption>A generated BSP world, walls coloured per sector.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="../assets/img/projects/ghost-engine-classic-2d-walls.jpg" alt="Close-up of wall rendering showing the per-column line heights" loading="lazy" decoding="async">
+          <figcaption>Wall rendering: every column is one perspective-divided line height.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="../assets/img/projects/ghost-engine-classic-2d-editor.jpg" alt="The 24 by 24 grid map editor running on the OLED" loading="lazy" decoding="async">
+          <figcaption>The map editor behind the RAYCAST mode.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="../assets/img/projects/ghost-engine-classic-2d-final.jpg" alt="The finished game running on the OLED module" loading="lazy" decoding="async">
+          <figcaption>The finished build, with sky and floor strips enabled.</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="media-block media-block--wide">
+      <h2 class="visually-hidden">Videos</h2>
+      <div class="gallery">
+        <div>
+          <button class="video" type="button" data-video-id="XWTsxJl02wU" data-video-title="Game Engine on Arduino — Final Part">
+            <img src="../assets/img/video/XWTsxJl02wU.jpg" alt="The engine and game running on the OLED display" loading="lazy" decoding="async">
+            <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
+            <span class="visually-hidden">Play video: Game Engine on Arduino — Final Part</span>
+          </button>
+          <p class="reel-card__meta" style="margin-top:var(--space-3)">Engine and game on the OLED</p>
+        </div>
+        <div>
+          <button class="video" type="button" data-video-id="WRVSrZ5XRVQ" data-video-title="Game Engine on Arduino — Bonus Part, LED matrix">
+            <img src="../assets/img/video/WRVSrZ5XRVQ.jpg" alt="The same engine rendering onto an LED matrix" loading="lazy" decoding="async">
+            <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
+            <span class="visually-hidden">Play video: Game Engine on Arduino — LED matrix</span>
+          </button>
+          <p class="reel-card__meta" style="margin-top:var(--space-3)">The same renderer driving an LED matrix</p>
+        </div>
+      </div>
+    </div>
+
+    <nav class="pager" aria-label="More projects">
+      <a href="ghost-station.html"><span>← Previous</span><strong>Ghost Station</strong></a>
+      <a href="ghost-engine-3d.html"><span>Next →</span><strong>Ghost Engine 3D</strong></a>
+    </nav>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="shell site-footer__inner">
+    <span>© 2026 GhostlyActive · Marlon</span>
+    <span><a href="../index.html">Back to the portfolio</a></span>
+  </div>
+</footer>
+
+<script src="../assets/js/video.js" defer></script>
+</body>
+</html>

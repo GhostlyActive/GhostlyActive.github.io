@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ghost Morse Telegraph — GhostlyActive</title>
+<meta name="description" content="A Morse telegraph built around a single bidirectional solenoid: key a message in by hand, and after seven seconds of silence the same coil taps it back out.">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/tokens.css">
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/site.css">
+<link rel="stylesheet" href="../assets/css/project.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<svg class="visually-hidden" aria-hidden="true" focusable="false">
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></symbol>
+</svg>
+
+<nav class="site-nav">
+  <div class="shell site-nav__inner">
+    <a class="site-nav__brand" href="../index.html">
+      <img class="site-nav__logo" src="../assets/logo.svg" alt="" width="34" height="34">
+      <span class="site-nav__names">
+        <span class="site-nav__name">GhostlyActive</span>
+        <span class="site-nav__sub">Marlon</span>
+      </span>
+    </a>
+    <ul class="site-nav__links">
+      <li><a href="../index.html#builds">Builds</a></li>
+      <li><a href="../index.html#studio">Work &amp; experiments</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="main">
+  <div class="shell">
+
+    <header class="project-header">
+      <a class="back-link" href="../index.html#builds">← All builds</a>
+      <p class="project-header__kicker">Own build · 2026</p>
+      <h1>Ghost Morse Telegraph</h1>
+      <p class="project-header__lede">
+        A Morse telegraph built around a single solenoid that works in both directions. Pressed by
+        hand, the plunger keys a message into an Arduino Uno. After seven seconds of silence, the
+        coil fires and the same plunger taps the message back out, as if moved by a ghost's hand.
+      </p>
+      <div class="project-header__actions">
+        <a class="btn btn--primary" href="https://github.com/GhostlyActive/Ghost-Morse-Telegraph" rel="noopener">View source</a>
+        <a class="btn" href="https://www.youtube.com/watch?v=MOnRhFvCphw" rel="noopener">Watch on YouTube</a>
+      </div>
+    </header>
+
+    <dl class="specs">
+      <div><dt>MCU</dt><dd>Arduino Uno</dd></div>
+      <div><dt>Display</dt><dd>SSD1351 OLED · 128 × 128 · hardware SPI</dd></div>
+      <div><dt>Actuator</dt><dd>Solenoid via TIP120 darlington</dd></div>
+      <div><dt>Language</dt><dd>C++ · PlatformIO</dd></div>
+      <div><dt>Supply</dt><dd>Single 9 V rail</dd></div>
+    </dl>
+
+    <div class="media-block">
+      <figure class="figure">
+        <video src="../assets/img/projects/ghost-morse-telegraph-loop.mp4"
+               poster="../assets/img/projects/ghost-morse-telegraph-loop.jpg"
+               autoplay muted loop playsinline preload="metadata"
+               aria-label="The telegraph keying a message and replaying it on the solenoid"></video>
+        <figcaption>Keying by hand, then the reply: the same plunger, driven by its own coil.</figcaption>
+      </figure>
+    </div>
+
+    <div class="prose">
+
+      <h2>The idea</h2>
+      <p>
+        A solenoid is normally either an input or an output. Here it is both. The plunger sits above
+        a push button, so pressing it by hand keys Morse into the Arduino; energising the coil pushes
+        that same plunger down, which is how the device answers. One moving part, two roles.
+      </p>
+
+      <div class="diagram">
+<pre>   hand ──► plunger ──► button ──► Uno ──► OLED   (live decode)
+               ▲                    │
+               └────── coil ◄───────┘           (replay)</pre>
+      </div>
+
+      <p>
+        The OLED decodes as you key: the current letter large in the middle, its Morse code small
+        underneath, and the sentence growing along the bottom.
+      </p>
+
+      <h2>Four states</h2>
+      <div class="data-table">
+        <table>
+          <caption class="visually-hidden">The firmware state machine</caption>
+          <thead>
+            <tr><th scope="col">State</th><th scope="col">What happens</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Idle</td><td>The screen shows <em>Ghost Morse</em> and a hint to start tapping.</td></tr>
+            <tr><td>Composing</td><td>The letter being keyed is shown large, its Morse code in small print underneath. Committed letters fall down into the sentence at the bottom.</td></tr>
+            <tr><td>Transmitting</td><td>After 7 s of silence the sentence slides off the right edge. The solenoid then keys the message back out while the display rebuilds it letter by letter, in step with the clacking.</td></tr>
+            <tr><td>Result</td><td>The finished sentence holds on screen for 3 s, then back to idle.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Timing</h2>
+      <p>
+        A short press is a dot, a press over 250 ms is a dash. 600 ms of silence commits a letter,
+        1.4 s inserts a word space, and after 7 s the ghost takes over. Everything worth tuning lives
+        in <code>include/config.h</code> — including <code>kUnitMs</code>, the replay speed, where
+        higher values simply give the plunger more time to return between taps.
+      </p>
+      <p>
+        The serial monitor mirrors the whole session, including which letters are still reachable
+        from the symbols keyed so far:
+      </p>
+
+      <div class="diagram">
+<pre>  [.] -&gt; E   possible: E I S H 5
+  [..] -&gt; I   possible: I S H 5
+  [....] -&gt; H   possible: H 5
+  &gt;&gt; "H"
+  [..] -&gt; I   possible: I S H 5
+  &gt;&gt; "HI"
+=== Transmitting: "HI"
+=== Done.</pre>
+      </div>
+
+      <h2>Driving the coil</h2>
+      <p>
+        The interesting part of the electronics is not the switching, it is the power. The solenoid
+        hangs directly on the 9 V rail rather than behind the Arduino's regulator, with a TIP120
+        darlington switching the low side:
+      </p>
+
+      <div class="diagram">
+<pre>  9 V+ ──┬─────────────────────────► VIN  (Arduino)
+         │
+         ├──► solenoid (+)
+         │       solenoid (−) ──┬──► collector (TIP120)
+         │                      │
+         └──[1N5408, cathode]───┘    (diode points back to 9 V+)
+
+  D9 ──[1 kΩ]──► base (TIP120)
+
+  9 V− ── GND ──► emitter, Arduino GND     ← one common ground, mandatory</pre>
+      </div>
+
+      <p>
+        Two components in there are not optional. The <strong>1N5408 flyback diode</strong> catches
+        the inductive kick when the coil switches off, which would otherwise punch through the
+        transistor. And the <strong>470–1000 µF bulk capacitor</strong> across the 9 V rail holds it
+        up during the current spike — without it the rail dips far enough that the Uno browns out and
+        resets in the middle of replaying a message. That failure is what the capacitor is there for,
+        and it took a while to recognise.
+      </p>
+
+      <div class="data-table">
+        <table>
+          <caption class="visually-hidden">Pin map</caption>
+          <thead>
+            <tr><th scope="col">Signal</th><th scope="col">Uno pin</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Telegraph key</td><td>D2 (to GND, <code>INPUT_PULLUP</code>)</td></tr>
+            <tr><td>Solenoid driver (TIP120 base)</td><td>D9</td></tr>
+            <tr><td>OLED CS / DC / RST</td><td>D10 / D7 / D8</td></tr>
+            <tr><td>OLED DIN / CLK</td><td>D11 / D13 — hardware SPI, cannot be moved</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Structure</h2>
+      <p>
+        Each concern gets its own header: a debounced button, a buffer for the current letter's
+        symbols, a buffer for the full message, the Morse lookup, the solenoid transmitter, the
+        display driver, and a <code>telegraph.h</code> state machine that ties them together. The
+        entry point in <code>main.cpp</code> is just <code>setup</code> and <code>loop</code>.
+      </p>
+
+    </div>
+
+    <div class="media-block media-block--wide">
+      <div class="gallery">
+        <figure class="figure">
+          <img src="../assets/img/projects/ghost-morse-telegraph-inside.jpg" alt="Inside the enclosure: wiring, transistor and the OLED module" loading="lazy" decoding="async">
+          <figcaption>Inside the enclosure — driver, wiring and the OLED.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="../assets/img/projects/ghost-morse-telegraph-build.jpg" alt="The finished telegraph in a small wooden box with a brass latch" loading="lazy" decoding="async">
+          <figcaption>The finished build. The solenoid pokes out the left side as the key.</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="media-block">
+      <h2 class="visually-hidden">Video</h2>
+      <button class="video" type="button" data-video-id="MOnRhFvCphw" data-video-title="Morse Telegraph on Arduino">
+        <img src="../assets/img/video/MOnRhFvCphw.jpg" alt="The Ghost Morse Telegraph being keyed by hand" loading="lazy" decoding="async">
+        <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
+        <span class="video__duration">0:56</span>
+        <span class="visually-hidden">Play video: Morse Telegraph on Arduino</span>
+      </button>
+    </div>
+
+    <nav class="pager" aria-label="More projects">
+      <a href="ghost-pixel-lab.html"><span>← Previous</span><strong>Ghost Pixel Lab</strong></a>
+      <a href="voxel-terraformer.html"><span>Next →</span><strong>VoxelTerraformer</strong></a>
+    </nav>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="shell site-footer__inner">
+    <span>© 2026 GhostlyActive · Marlon</span>
+    <span><a href="../index.html">Back to the portfolio</a></span>
+  </div>
+</footer>
+
+<script src="../assets/js/video.js" defer></script>
+</body>
+</html>

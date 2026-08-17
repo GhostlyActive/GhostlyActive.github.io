@@ -1,0 +1,129 @@
+# ghostlyactive.github.io
+
+My portfolio — interactive installations, augmented reality and real-time 3D, alongside the
+renderers and firmware I write on my own time.
+
+**→ [ghostlyactive.github.io](https://ghostlyactive.github.io)**
+
+A static site: plain HTML, CSS and 60 lines of JavaScript. No build step, no dependencies, no
+framework. Clone it and open `index.html`.
+
+## What is on it
+
+- **Own builds** — seven projects with source on GitHub, each with its own page on how it works:
+  a raycasting engine on an 8 KB microcontroller, a Commodore 64 rebuilt on an AMOLED panel, a
+  telegraph driven by a single solenoid, two voxel engines, a DirectX 11 engine, a cartridge console.
+- **Client work & experiments** — thirteen recorded projects: museum exhibits, AR on iPad, arcade
+  games, virtual production in Unreal Engine.
+
+## Structure
+
+```
+index.html                 Hero, own builds, client work & experiments, contact
+projects/                  One page per repository
+  ghost-pixel-lab.html
+  ghost-engine-classic-2d.html
+  ghost-morse-telegraph.html
+  voxel-terraformer.html
+  ghost-engine-3d.html
+  voxel-pi.html
+  ghost-station.html
+assets/
+  css/
+    tokens.css             Design tokens — colours, type scale, spacing. Change here first.
+    base.css               Reset, typography, accessibility helpers
+    site.css               Landing-page components
+    project.css            Project-page components
+  js/video.js              YouTube facades, reduced-motion handling, deferred playback
+  img/projects/            Stills and MP4 loops pulled from the project repositories
+  img/video/               YouTube poster frames, one per video ID
+  logo.svg                 Jellyfish mark — nav logo and favicon
+  logo-alt.svg             Earlier variant, swimming upward
+  logo-symmetric.svg       Earlier variant, symmetric fan
+```
+
+## Local preview
+
+Every path in the project is relative, so opening `index.html` in a browser works. A server is
+closer to production:
+
+```bash
+python3 -m http.server 4173
+```
+
+## Deploying to GitHub Pages
+
+Name the repository **`GhostlyActive.github.io`**. GitHub treats a repo named `<username>.github.io`
+as the account's user site and serves it at the bare `https://ghostlyactive.github.io/` — no
+`/portfolio/` sub-path in the URL. Any other name works too and lands at
+`https://ghostlyactive.github.io/<repo>/`; since no path here is absolute, nothing breaks either way.
+
+```bash
+git init -b main
+git add .
+git commit -m "feat: portfolio site"
+git remote add origin git@github.com:GhostlyActive/GhostlyActive.github.io.git
+git push -u origin main
+```
+
+Then in the repository: **Settings → Pages → Source: Deploy from a branch → `main` / `root`.**
+The site is live a minute later. `.nojekyll` is present so Jekyll does not touch the files.
+
+## Adding a video
+
+Poster frames are stored in this repo, so nothing is requested from YouTube until someone clicks
+play. Download the thumbnail, then drop a facade into the markup:
+
+```bash
+curl -L "https://i.ytimg.com/vi/<VIDEO_ID>/maxresdefault.jpg" -o assets/img/video/<VIDEO_ID>.jpg
+```
+
+```html
+<button class="video" type="button" data-video-id="<VIDEO_ID>" data-video-title="Title">
+  <img src="assets/img/video/<VIDEO_ID>.jpg" alt="Describe the frame" loading="lazy" decoding="async">
+  <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
+  <span class="video__duration">1:23</span>
+  <span class="visually-hidden">Play video: Title</span>
+</button>
+```
+
+The client-work section shows the thirteen public videos from the channel. Unlisted ones do not
+appear in the channel feed, so their IDs have to come from the share URL by hand.
+
+## Media notes
+
+The animated GIFs in the source repositories total about 54 MB. They are converted to H.264 MP4
+here — twelve clips, 3 MB in total — each with a poster frame:
+
+```bash
+ffmpeg -i in.gif -movflags +faststart -pix_fmt yuv420p \
+  -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -c:v libx264 -crf 27 -preset slow -an out.mp4
+ffmpeg -ss 3 -i out.mp4 -vframes 1 -q:v 5 out.jpg
+```
+
+Two rules govern how these clips play, both enforced in `video.js`:
+
+**Reduced motion.** CSS cannot switch off an autoplaying video, so when
+`prefers-reduced-motion: reduce` is set the script drops the autoplay and shows controls instead.
+Any page with an autoplaying clip has to load the script, even one with no YouTube facades on it.
+
+**Below the fold.** `autoplay` overrides `preload="none"`, so a clip far down the page would be
+fetched on load whether or not anyone scrolls to it. Those use `data-play-in-view` instead and start
+on an IntersectionObserver. The contact clip is the only one today; use the same attribute for any
+future clip that is not near the top of its page.
+
+The hero clip is `ghost-pixel-lab-flight.mp4`, 400 × 224 native and displayed around 434 px wide —
+near enough to 1:1 to stay sharp. A larger source is fine; a smaller one will look soft.
+
+## The logo
+
+`assets/logo.svg` is a vector jellyfish knocked out of an orange tile in the site accent (`#ffa62b`),
+drawn after a reference photo: bell at the bottom, tentacles streaming up, the posture of an animal
+swimming downward. One file serves as both the 34 px nav mark and the favicon. It is vector because
+a photo cutout turns to mush at 16 px.
+
+Two earlier variants sit beside it. To switch, swap the filename in `<link rel="icon">` and
+`.site-nav__logo` in `index.html` and all seven project pages.
+
+All three hard-code their two hex values, since a standalone SVG cannot read CSS custom properties —
+so if the accent changes in `tokens.css`, update the tile fill and the knockout to match.

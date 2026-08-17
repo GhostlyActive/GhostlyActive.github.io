@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VoxelPi — GhostlyActive</title>
+<meta name="description" content="The Comanche VoxelSpace algorithm reimplemented in Python and Pygame, tuned to run on a Raspberry Pi with gamepad control.">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/tokens.css">
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/site.css">
+<link rel="stylesheet" href="../assets/css/project.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<nav class="site-nav">
+  <div class="shell site-nav__inner">
+    <a class="site-nav__brand" href="../index.html">
+      <img class="site-nav__logo" src="../assets/logo.svg" alt="" width="34" height="34">
+      <span class="site-nav__names">
+        <span class="site-nav__name">GhostlyActive</span>
+        <span class="site-nav__sub">Marlon</span>
+      </span>
+    </a>
+    <ul class="site-nav__links">
+      <li><a href="../index.html#builds">Builds</a></li>
+      <li><a href="../index.html#studio">Work &amp; experiments</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="main">
+  <div class="shell">
+
+    <header class="project-header">
+      <a class="back-link" href="../index.html#builds">← All builds</a>
+      <p class="project-header__kicker">Own build · 2023</p>
+      <h1>VoxelPi</h1>
+      <p class="project-header__lede">
+        An open-source reimplementation of the VoxelSpace engine — the terrain renderer behind
+        <em>Comanche</em> (1992) — in Python and Pygame, tuned to stay playable on a Raspberry Pi.
+      </p>
+      <div class="project-header__actions">
+        <a class="btn btn--primary" href="https://github.com/GhostlyActive/VoxelPi" rel="noopener">View source</a>
+      </div>
+    </header>
+
+    <dl class="specs">
+      <div><dt>Language</dt><dd>Python</dd></div>
+      <div><dt>Rendering</dt><dd>Pygame</dd></div>
+      <div><dt>Target</dt><dd>Raspberry Pi</dd></div>
+      <div><dt>Input</dt><dd>Gamepad and mouse</dd></div>
+      <div><dt>Technique</dt><dd>VoxelSpace column rendering</dd></div>
+    </dl>
+
+    <div class="media-block">
+      <figure class="figure">
+        <video src="../assets/img/projects/voxel-pi-flight.mp4"
+               poster="../assets/img/projects/voxel-pi-flight.jpg"
+               autoplay muted loop playsinline preload="metadata"
+               aria-label="Flying over VoxelSpace terrain rendered from height and colour maps"></video>
+        <figcaption>Flying over the terrain. Every frame is drawn as vertical columns, back to front.</figcaption>
+      </figure>
+    </div>
+
+    <div class="prose">
+
+      <h2>How VoxelSpace works</h2>
+      <p>
+        There is no 3D geometry in this renderer at all — no triangles, no mesh, no z-buffer. The
+        world is two bitmaps of the same size: a <strong>height map</strong> and a <strong>colour
+        map</strong>. To draw a frame, the engine walks outward from the camera in steps, and at each
+        step samples a horizontal line across the maps. Each sample becomes one vertical line on
+        screen, its height set by the height map and its colour taken from the colour map.
+      </p>
+      <p>
+        Drawing back to front, with nearer columns painted over farther ones, produces correct
+        occlusion for free. That is the whole trick, and it is why the technique ran at speed on 1992
+        hardware without a floating-point unit — and why it maps neatly onto a Raspberry Pi three
+        decades later.
+      </p>
+      <p>
+        The Python and Pygame implementation here is my own; the algorithm follows
+        <a href="https://github.com/s-macke/VoxelSpace" rel="noopener">s-macke's VoxelSpace</a>
+        write-up, which reconstructs the original renderer.
+      </p>
+
+      <h2>Making Python keep up</h2>
+      <p>
+        The catch is that a per-column loop in Python is exactly the shape of code Python is worst
+        at. The work here is less about the algorithm — which is short — and more about how much
+        detail can be traded away before it stops looking right: sampling step size, render distance
+        and column width are all adjustable, and the graphics settings exist so the same code can be
+        dialled between a desktop and a Pi.
+      </p>
+
+      <h3>Done</h3>
+      <ul>
+        <li>Gamepad input</li>
+        <li>Graphics settings</li>
+        <li>Mouse control</li>
+      </ul>
+
+      <h3>In progress</h3>
+      <ul>
+        <li>UI for the graphics settings</li>
+        <li>Actual game elements on top of the renderer</li>
+      </ul>
+
+    </div>
+
+    <div class="media-block media-block--wide">
+      <div class="gallery">
+        <figure class="figure">
+          <video src="../assets/img/projects/voxel-pi-graphics.mp4"
+                 poster="../assets/img/projects/voxel-pi-graphics.jpg"
+                 muted loop playsinline preload="none" controls
+                 aria-label="Different graphics settings compared side by side"></video>
+          <figcaption>The same scene at different quality settings.</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <nav class="pager" aria-label="More projects">
+      <a href="voxel-terraformer.html"><span>← Previous</span><strong>VoxelTerraformer</strong></a>
+      <a href="ghost-station.html"><span>Next →</span><strong>Ghost Station</strong></a>
+    </nav>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="shell site-footer__inner">
+    <span>© 2026 GhostlyActive · Marlon</span>
+    <span><a href="../index.html">Back to the portfolio</a></span>
+  </div>
+</footer>
+
+<script src="../assets/js/video.js" defer></script>
+</body>
+</html>
