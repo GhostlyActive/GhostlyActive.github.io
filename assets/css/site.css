@@ -327,9 +327,12 @@
   gap: var(--space-3);
 }
 
+/* Six entries land as 3 + 3 on a desktop and 2 + 2 + 2 on a tablet — at 11rem
+   the sixth came out orphaned on a row of its own. The 19rem is measured
+   against the 62rem cap plus two gaps, not picked for the look of it. */
 .hero__facts {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(11rem, 100%), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(19rem, 100%), 1fr));
   gap: var(--space-5);
   padding-top: var(--space-6);
   border-top: 1px solid var(--border);
