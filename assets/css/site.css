@@ -813,14 +813,10 @@
   margin-top: var(--space-6);
 }
 
+/* The heading now sits straight above the button with no paragraph between
+   them, so it needs the wider gap. */
 .contact h2 {
   font-size: var(--step-3);
-  margin-bottom: var(--space-4);
-}
-
-.contact p {
-  max-width: 42ch;
-  color: var(--text-muted);
   margin-bottom: var(--space-5);
 }
 
