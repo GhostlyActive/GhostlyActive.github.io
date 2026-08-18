@@ -38,6 +38,8 @@ assets/
   js/scenes.js             The two canvas backgrounds and the loop that drives them
   js/filter.js             Topic chips over the card grids, built from the cards themselves
   js/reveal.js             Fade-up on first scroll into view
+  js/extra.js              Unlisted reel, decrypted from the key in the URL fragment
+  data/extra.enc           That reel as ciphertext — see below
   img/projects/            Stills and MP4 loops pulled from the project repositories
   img/video/               YouTube poster frames, one per video ID
   img/og-image.jpg         1200 × 630 link preview — see below
@@ -131,6 +133,44 @@ good number of them drop the image without saying so.
 
 Only `index.html` carries these tags. A shared project page falls back to its `<title>` and
 description with no image.
+
+## The unlisted reel
+
+Some client videos are unlisted on YouTube. They are not in this repository in any readable form —
+`assets/data/extra.enc` is AES-256-GCM ciphertext and holds no title, no description and no video
+ID. The key lives in the URL fragment:
+
+```
+https://ghostlyactive.github.io/#k=<key>
+```
+
+A fragment is never sent to a server and never appears in a `Referer` header, so the key stays
+between the link and the browser. Without it `extra.js` decrypts nothing and the page is exactly
+what every other visitor sees — same thirteen cards, same chip counts.
+
+The plaintext lives in `secret/extra.json`, which `.gitignore` keeps out of the repository along
+with `secret/extra.key`. After editing it:
+
+```bash
+node tools/pack-extra.mjs             # reuse the existing key
+node tools/pack-extra.mjs --new-key   # roll the key, invalidating every old link
+```
+
+The key is 128 bit rather than 256: the ciphertext is public either way, so the only attack is
+offline brute force, and 2^128 settles that. It also halves the link.
+
+`topics` on each card must match a chip already declared in `index.html`, because the chips are
+built from the grid: `extra.js` appends the cards, fires `cards:changed`, and `filter.js` rebuilds
+every chip and count from whatever the grid now holds.
+
+Poster frames come from `i.ytimg.com` rather than `img/video/`, since a file named after the video
+would put the ID back in the public directory listing. Only someone holding the key ever triggers
+those requests. Not every upload has a `maxresdefault` frame — YouTube answers those with a grey
+120 x 90 placeholder instead of a 404, so the poster falls back to `hqdefault` on size, not on error.
+
+**What this does not protect against:** anyone you send the link to can read the key out of their own
+address bar and pass it on. It keeps the reel out of the public site and out of the public repo; it
+is not a per-person permission.
 
 ## The canvas scenes
 

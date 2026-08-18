@@ -85,4 +85,21 @@ function buildBar(bar) {
   bar.dataset.ready = "";
 }
 
-for (const bar of document.querySelectorAll(".filter[data-filter]")) buildBar(bar);
+function buildAll() {
+  for (const card of document.querySelectorAll(".work-card, .reel-card")) {
+    card.hidden = false;
+    card.classList.remove("is-leaving");
+  }
+
+  for (const bar of document.querySelectorAll(".filter[data-filter]")) {
+    bar.replaceChildren();
+    delete bar.dataset.ready;
+    buildBar(bar);
+  }
+}
+
+buildAll();
+
+// extra.js appends cards long after this script has run, so the chips and their
+// counts are rebuilt from whatever the grid holds at that moment.
+document.addEventListener("cards:changed", buildAll);
