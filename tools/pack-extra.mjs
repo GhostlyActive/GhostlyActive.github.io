@@ -34,6 +34,45 @@ async function loadKey() {
 }
 
 const source = JSON.parse(await readFile(SOURCE, "utf8"));
+
+/**
+ * A card that is missing a field throws inside extra.js, and the catch there
+ * swallows it — the whole reel would then stay invisible with no clue why. A
+ * topic that no chip declares is quieter still: the card renders but no filter
+ * can reach it. Both are caught here instead, before anything ships.
+ */
+function validate(cards, markup) {
+  const declared = new Set(
+    (markup.match(/data-filter="#studio-grid"[\s\S]*?data-topics="([^"]+)"/) ?? [, ""])[1]
+      .replaceAll("&amp;", "&")
+      .split("|"),
+  );
+
+  const problems = [];
+  cards.forEach((card, index) => {
+    const where = `card ${index + 1} (${card.title ?? card.id ?? "unnamed"})`;
+    for (const field of ["id", "title", "topics", "tags"]) {
+      if (!card[field] || card[field].length === 0) problems.push(`${where}: "${field}" is missing`);
+    }
+    for (const topic of card.topics ?? []) {
+      if (!declared.has(topic)) problems.push(`${where}: topic "${topic}" has no chip in index.html`);
+    }
+  });
+
+  const seen = new Set();
+  for (const card of cards) {
+    if (seen.has(card.id)) problems.push(`video id ${card.id} appears twice`);
+    seen.add(card.id);
+  }
+  return problems;
+}
+
+const problems = validate(source.cards, await readFile("index.html", "utf8"));
+if (problems.length > 0) {
+  console.error(`${problems.length} problem(s), nothing written:\n  ` + problems.join("\n  "));
+  process.exit(1);
+}
+
 const payload = { cards: source.cards };
 
 const raw = await loadKey();

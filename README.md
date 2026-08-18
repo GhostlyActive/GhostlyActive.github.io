@@ -44,8 +44,15 @@ assets/
   img/video/               YouTube poster frames, one per video ID
   img/og-image.jpg         1200 × 630 link preview — see below
   apple-touch-icon.png     180 × 180, iOS home screen
+  favicon-32.png           PNG fallback for clients that ignore the SVG icon
   logo.svg                 Round jellyfish mark — nav logo and favicon
+apple-touch-icon.png         Root copy — iOS probes this path directly
 ```
+
+A second copy of the touch icon sits in the repository root. iOS looks for
+`/apple-touch-icon.png` on its own when it does not use the `<link>` tag, and without
+it Safari falls back to a screenshot of the page — which is what shows up on a
+bookmark instead of the mark. Keep both copies in step.
 
 ## Local preview
 
@@ -137,7 +144,7 @@ description with no image.
 ## The unlisted reel
 
 Some client videos are unlisted on YouTube. They are not in this repository in any readable form —
-`assets/data/extra.enc` is AES-256-GCM ciphertext and holds no title, no description and no video
+`assets/data/extra.enc` is AES-128-GCM ciphertext and holds no title, no description and no video
 ID. The key lives in the URL fragment:
 
 ```
@@ -158,6 +165,10 @@ node tools/pack-extra.mjs --new-key   # roll the key, invalidating every old lin
 
 The key is 128 bit rather than 256: the ciphertext is public either way, so the only attack is
 offline brute force, and 2^128 settles that. It also halves the link.
+
+`pack-extra.mjs` refuses to write if a card is missing a field, carries a topic that no chip
+declares, or repeats a video id. Without that check a typo would ship silently: a missing field
+throws inside `extra.js`, where the catch swallows it and the entire reel stays invisible.
 
 `topics` on each card must match a chip already declared in `index.html`, because the chips are
 built from the grid: `extra.js` appends the cards, fires `cards:changed`, and `filter.js` rebuilds

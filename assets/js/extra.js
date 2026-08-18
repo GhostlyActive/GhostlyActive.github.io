@@ -55,12 +55,17 @@ function buildCard(card) {
   button.type = "button";
   button.dataset.videoId = card.id;
   button.dataset.videoTitle = card.title;
-  button.append(poster);
-  button.insertAdjacentHTML(
-    "beforeend",
-    `<span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>` +
-      `<span class="visually-hidden">Play video: ${card.title}</span>`,
-  );
+  // Only the play icon is markup. The title goes in as text: interpolated into
+  // HTML, a "<" in a title would be parsed as a tag and eat the rest of it.
+  const play = document.createElement("span");
+  play.className = "video__play";
+  play.innerHTML = '<svg aria-hidden="true"><use href="#i-play"></use></svg>';
+
+  const label = document.createElement("span");
+  label.className = "visually-hidden";
+  label.textContent = `Play video: ${card.title}`;
+
+  button.append(poster, play, label);
 
   const body = document.createElement("div");
   body.className = "reel-card__body";
