@@ -78,6 +78,13 @@
 
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", () => update(true));
+
+    // Filtering a grid or unlocking the reel moves the sections under you with
+    // no scrolling involved, so the marker would keep pointing at the old one.
+    if (typeof ResizeObserver !== "undefined") {
+      new ResizeObserver(() => update()).observe(document.body);
+    }
+
     update(true);
 
     // The brand behaves like a reload: back to the top, every filter cleared.

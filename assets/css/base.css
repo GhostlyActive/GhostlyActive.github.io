@@ -14,6 +14,14 @@ html {
   scroll-padding-top: 5rem;
 }
 
+/* Once the labels no longer fit beside the brand the bar wraps onto a second
+   row, and an anchor jump would put the heading underneath it. */
+@media (max-width: 46rem) {
+  html {
+    scroll-padding-top: 6.5rem;
+  }
+}
+
 body {
   background-color: var(--bg);
   color: var(--text);
