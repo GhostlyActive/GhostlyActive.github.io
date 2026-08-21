@@ -364,9 +364,12 @@
   max-width: 62rem;
 }
 
+/* Same label-over-value pair as the spec strip on a project page, and it reads
+   the same way: the label is the quiet one, the value carries the text colour.
+   Two greys a step apart made the two lines look like one block. */
 .hero__fact dt {
   font-family: var(--font-mono);
-  font-size: var(--step--1);
+  font-size: var(--step--2);
   color: var(--text-faint);
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -376,7 +379,7 @@
 .hero__fact dd {
   margin: 0;
   font-size: var(--step--1);
-  color: var(--text-muted);
+  color: var(--text);
 }
 
 /* ---------- Buttons ---------- */
