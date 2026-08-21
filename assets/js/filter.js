@@ -7,6 +7,10 @@
  */
 const FADE_MS = 220;
 
+// One pending fade-out per bar, so a rebuild can cancel it — otherwise a reset
+// inside those 220 ms is undone by the timer it did not know about.
+const pendingHides = new Map();
+
 function readTopics(element) {
   return (element.dataset.topics || "")
     .split("|")
@@ -53,8 +57,6 @@ function buildBar(bar) {
     return { chip, topic, matching };
   });
 
-  let pending = 0;
-
   function apply(selected) {
     for (const { chip, topic, matching } of chips) {
       const active = topic === selected;
@@ -75,10 +77,13 @@ function buildBar(bar) {
 
     // The outgoing cards fade before the grid reflows, so the ones that stay
     // move once instead of jumping while their neighbours are still visible.
-    clearTimeout(pending);
-    pending = setTimeout(() => {
-      for (const card of leaving) card.hidden = true;
-    }, FADE_MS);
+    clearTimeout(pendingHides.get(bar));
+    pendingHides.set(
+      bar,
+      setTimeout(() => {
+        for (const card of leaving) card.hidden = true;
+      }, FADE_MS),
+    );
   }
 
   bar.append(status);
@@ -86,6 +91,9 @@ function buildBar(bar) {
 }
 
 function buildAll() {
+  for (const timer of pendingHides.values()) clearTimeout(timer);
+  pendingHides.clear();
+
   for (const card of document.querySelectorAll(".work-card, .reel-card")) {
     card.hidden = false;
     card.classList.remove("is-leaving");
@@ -103,3 +111,6 @@ buildAll();
 // extra.js appends cards long after this script has run, so the chips and their
 // counts are rebuilt from whatever the grid holds at that moment.
 document.addEventListener("cards:changed", buildAll);
+
+// The brand in the navigation puts the page back to its loaded state.
+document.addEventListener("filters:reset", buildAll);

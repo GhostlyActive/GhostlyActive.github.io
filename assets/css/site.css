@@ -54,13 +54,14 @@
 
 .site-nav__sub {
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--step--2);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--text-faint);
 }
 
 .site-nav__links {
+  position: relative;
   display: flex;
   gap: var(--space-5);
   list-style: none;
@@ -68,6 +69,27 @@
   font-family: var(--font-mono);
   font-size: var(--step--1);
   min-width: 0;
+}
+
+/* Built by nav.js and slid from link to link as you scroll. Without the script
+   there is no marker at all, which is why the links carry the weight change
+   too. The labels are monospace, so bold does not move anything sideways. */
+.site-nav__marker {
+  position: absolute;
+  bottom: 0.45rem;
+  left: 0;
+  width: 0;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--accent);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.32s var(--ease), width 0.32s var(--ease), opacity 0.2s var(--ease);
+}
+
+.site-nav__links a[aria-current] {
+  color: var(--text);
+  font-weight: 600;
 }
 
 /* Narrow screens swap to the short labels rather than a swipeable row. */
@@ -265,16 +287,19 @@
   box-shadow: var(--shadow-lift), 0 0 70px -24px var(--accent);
 }
 
+/* Both captions sit on top of a canvas scene, so they get the muted tier
+   rather than the faint one — over the terrain silhouette the faint grey is
+   below the contrast floor. */
 .media-panel figcaption {
   margin-top: var(--space-4);
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--step--2);
   line-height: 1.7;
-  color: var(--text-faint);
+  color: var(--text-muted);
 }
 
 .media-panel figcaption strong {
-  color: var(--text-muted);
+  color: var(--text);
   font-weight: 600;
 }
 
@@ -474,12 +499,12 @@
   .filter__chip {
     min-height: 2.25rem;
     padding: 0.3rem 0.65rem;
-    font-size: 0.75rem;
+    font-size: var(--step--2);
   }
 }
 
 .filter__count {
-  font-size: 0.625rem;
+  font-size: var(--step--2);
   color: var(--text-faint);
 }
 
@@ -555,7 +580,7 @@
   backdrop-filter: blur(6px);
   border: 1px solid var(--border);
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--step--2);
   color: var(--text-muted);
 }
 
@@ -569,7 +594,7 @@
 
 .work-card__kicker {
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--step--2);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--accent);
@@ -615,7 +640,7 @@
   border-radius: var(--radius-sm);
   background: var(--bg-sunken);
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--step--2);
   color: var(--text-muted);
   white-space: nowrap;
 }
@@ -640,7 +665,7 @@
   padding-top: var(--space-3);
   border-top: 1px solid var(--border);
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--step--2);
   color: var(--text-faint);
 }
 
@@ -682,7 +707,7 @@
 
 .reel-card__meta {
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--step--2);
   color: var(--text-faint);
 }
 
@@ -770,7 +795,7 @@
   border-radius: var(--radius-sm);
   background: rgba(8, 8, 10, 0.9);
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--step--2);
   color: var(--text-muted);
   pointer-events: none;
 }

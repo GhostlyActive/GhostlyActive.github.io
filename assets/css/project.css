@@ -67,7 +67,7 @@
 
 .specs dt {
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--step--2);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-faint);
@@ -199,7 +199,7 @@
 
 .data-table th {
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--step--2);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--text-faint);
@@ -240,7 +240,7 @@
 .figure figcaption {
   margin-top: var(--space-3);
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--step--2);
   color: var(--text-faint);
   line-height: 1.5;
 }
@@ -276,7 +276,7 @@
 
 .pager span {
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: var(--step--2);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-faint);

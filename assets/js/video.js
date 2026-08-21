@@ -44,7 +44,7 @@ if (deferred.length > 0 && !reduceMotion) {
  */
 document.addEventListener("click", (event) => {
   const facade = event.target.closest(".video[data-video-id]");
-  if (!facade || facade.classList.contains("is-playing")) return;
+  if (!facade) return;
 
   const iframe = document.createElement("iframe");
   iframe.src =
@@ -55,6 +55,15 @@ document.addEventListener("click", (event) => {
     "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
   iframe.allowFullscreen = true;
 
-  facade.classList.add("is-playing");
-  facade.replaceChildren(iframe);
+  // The facade is a <button>, which may not contain an iframe: the player would
+  // end up inside a control that keeps announcing itself and swallowing keys.
+  // So the button is replaced rather than filled.
+  const frame = document.createElement("div");
+  frame.className = "video is-playing";
+  frame.append(iframe);
+  facade.replaceWith(frame);
+
+  // The element that had focus is gone; without this a keyboard visitor lands
+  // back at the top of the document.
+  iframe.focus({ preventScroll: true });
 });
