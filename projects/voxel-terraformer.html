@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>VoxelTerraformer — GhostlyActive</title>
-<meta name="description" content="An experimental voxel engine in C# and raylib: an endless streaming world with three voxel modes — blocks, sculpt and marching-cubes smooth — over the same terrain data.">
+<meta name="description" content="An experimental voxel engine in C# and raylib: an endless streaming world where the same terrain can be edited as blocks, sculpted, or rendered smooth with marching cubes.">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#0b0b0d">
 <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
@@ -50,8 +50,8 @@
       <h1>VoxelTerraformer</h1>
       <p class="project-header__lede">
         An experimental voxel world in C#, focused on an endless streaming terrain, real-time
-        terraforming and a clean, extensible architecture. The goal was never a finished game — it is
-        a technical sandbox for working out how voxel engines hold together.
+        terraforming and a clean, extensible architecture. The goal was never a finished game. It is a
+        technical sandbox for working out how voxel engines hold together.
       </p>
       <div class="project-header__actions">
         <a class="btn btn--primary" href="https://github.com/GhostlyActive/VoxelTerraformer" rel="noopener">View source</a>
@@ -74,7 +74,7 @@
                width="640" height="360"
                autoplay muted loop playsinline preload="metadata"
                aria-label="A rocket launches into the clouds, falls back and blows a crater into the voxel terrain, which is then shown again in smooth mode"></video>
-        <figcaption>A rocket goes up, comes down and leaves a crater — then the same crater in smooth mode.</figcaption>
+        <figcaption>A rocket goes up, comes down and leaves a crater. Then the same crater in smooth mode.</figcaption>
       </figure>
     </div>
 
@@ -94,8 +94,8 @@
       <p>
         The interesting part is that the mode is a rendering and editing decision, not a world
         format. The voxel data underneath never changes shape, so switching is free and reversible:
-        build a house out of blocks, flip to smooth, and it looks like it was shaped out of clay —
-        flip back and every block is exactly where you left it.
+        build a house out of blocks, flip to smooth, and it looks like it was shaped out of clay. Flip
+        back and every block is exactly where you left it.
       </p>
 
       <div class="data-table">
@@ -148,13 +148,13 @@
           <tbody>
             <tr><td>Move and look</td><td><code>W</code> <code>A</code> <code>S</code> <code>D</code>, mouse</td></tr>
             <tr><td>Sprint, jump</td><td><code>Shift</code>, <code>Space</code></td></tr>
-            <tr><td>Remove, place</td><td>Left, right mouse button — hold in sculpt and smooth mode</td></tr>
+            <tr><td>Remove, place</td><td>Left, right mouse button (hold in sculpt and smooth mode)</td></tr>
             <tr><td>Build distance</td><td>Mouse wheel</td></tr>
             <tr><td>Brush size</td><td><code>Ctrl</code> + mouse wheel</td></tr>
             <tr><td>Switch voxel mode</td><td><code>V</code></td></tr>
             <tr><td>Slower, faster day</td><td><code>Z</code>, <code>U</code></td></tr>
             <tr><td>Tuning menu, debug overlay</td><td><code>M</code>, <code>F3</code></td></tr>
-            <tr><td>Pause menu — save, load, quit</td><td><code>ESC</code></td></tr>
+            <tr><td>Pause menu: save, load, quit</td><td><code>ESC</code></td></tr>
           </tbody>
         </table>
       </div>
@@ -172,11 +172,11 @@
       <div class="gallery">
         <figure class="figure">
           <img src="../assets/img/projects/voxel-terraformer-1.jpg" width="1280" height="720" alt="Blocks mode: two spheres carved out of green voxel terrain as stepped cubes, under a cloudy blue sky" loading="lazy" decoding="async">
-          <figcaption>Blocks mode — the same two carved spheres, stepped into cubes.</figcaption>
+          <figcaption>Blocks mode: the same two carved spheres, stepped into cubes.</figcaption>
         </figure>
         <figure class="figure">
           <img src="../assets/img/projects/voxel-terraformer-2.jpg" width="1280" height="720" alt="Smooth mode: the same two carved spheres rendered as rounded surfaces over softly rolling green terrain" loading="lazy" decoding="async">
-          <figcaption>Smooth mode — same spot, same data, meshed with marching cubes.</figcaption>
+          <figcaption>Smooth mode, same spot and same data, meshed with marching cubes.</figcaption>
         </figure>
       </div>
     </div>

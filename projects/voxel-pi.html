@@ -89,7 +89,7 @@
       <p>
         Drawing back to front, with nearer columns painted over farther ones, produces correct
         occlusion for free. That is the whole trick, and it is why the technique ran at speed on 1992
-        hardware without a floating-point unit — and why it maps neatly onto a Raspberry Pi three
+        hardware without a floating-point unit, and why it maps neatly onto a Raspberry Pi three
         decades later.
       </p>
       <p>
@@ -101,7 +101,7 @@
       <h2>Making Python keep up</h2>
       <p>
         The catch is that a per-column loop in Python is exactly the shape of code Python is worst
-        at. The work here is less about the algorithm — which is short — and more about how much
+        at. The work here is less about the algorithm, which is short, and more about how much
         detail can be traded away before it stops looking right: sampling step size, render distance
         and column width are all adjustable, and the graphics settings exist so the same code can be
         dialled between a desktop and a Pi.

@@ -122,7 +122,7 @@
       <p>
         A short press is a dot, a press over 250 ms is a dash. 600 ms of silence commits a letter,
         1.4 s inserts a word space, and after 7 s the ghost takes over. Everything worth tuning lives
-        in <code>include/config.h</code> — including <code>kUnitMs</code>, the replay speed, where
+        in <code>include/config.h</code>, including <code>kUnitMs</code>, the replay speed, where
         higher values simply give the plunger more time to return between taps.
       </p>
       <p>
@@ -165,7 +165,7 @@
         Two components in there are not optional. The <strong>1N5408 flyback diode</strong> catches
         the inductive kick when the coil switches off, which would otherwise punch through the
         transistor. And the <strong>470–1000 µF bulk capacitor</strong> across the 9 V rail holds it
-        up during the current spike — without it the rail dips far enough that the Uno browns out and
+        up during the current spike. Without it the rail dips far enough that the Uno browns out and
         resets in the middle of replaying a message. That failure is what the capacitor is there for,
         and it took a while to recognise.
       </p>
@@ -180,7 +180,7 @@
             <tr><td>Telegraph key</td><td>D2 (to GND, <code>INPUT_PULLUP</code>)</td></tr>
             <tr><td>Solenoid driver (TIP120 base)</td><td>D9</td></tr>
             <tr><td>OLED CS / DC / RST</td><td>D10 / D7 / D8</td></tr>
-            <tr><td>OLED DIN / CLK</td><td>D11 / D13 — hardware SPI, cannot be moved</td></tr>
+            <tr><td>OLED DIN / CLK</td><td>D11 / D13 (hardware SPI, cannot be moved)</td></tr>
           </tbody>
         </table>
       </div>

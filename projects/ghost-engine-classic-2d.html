@@ -55,7 +55,7 @@
       <p class="project-header__lede">
         A pseudo-3D rendering engine for a 128 × 128 RGB OLED, combining two early-90s techniques:
         raycasting from <em>Wolfenstein 3D</em> and binary space partitioning from <em>Doom</em>.
-        The whole pipeline runs on an ATmega2560 — 16 MHz, 8 KB of SRAM.
+        The whole pipeline runs on an ATmega2560: 16 MHz, 8 KB of SRAM.
       </p>
       <div class="project-header__actions">
         <a class="btn btn--primary" href="https://github.com/GhostlyActive/Ghost-Engine-Classic-2D" rel="noopener">View source</a>
@@ -74,7 +74,7 @@
     <div class="media-block reveal">
       <figure class="figure">
         <img src="../assets/img/projects/ghost-engine-classic-2d-game.jpg" width="1600" height="1128" alt="The engine running on the OLED module: coloured walls in perspective, FPS counter top-left, minimap top-right" loading="lazy" decoding="async">
-        <figcaption>Photographed off the panel at close range — the pixel grid of the 1.5" OLED is the actual resolution the engine renders at.</figcaption>
+        <figcaption>Photographed off the panel at close range. The pixel grid of the 1.5" OLED is the actual resolution the engine renders at.</figcaption>
       </figure>
     </div>
 
@@ -88,7 +88,7 @@
       <h2>The constraint that shapes everything</h2>
       <p>
         8 KB of SRAM does not hold a framebuffer. A 128 × 128 screen at 16 bits per pixel would need
-        32 KB — four times the entire memory of the chip. So there is no back buffer to compose into
+        32 KB, four times the entire memory of the chip. So there is no back buffer to compose into
         and blit; every pixel that changes has to be pushed over SPI as it is decided, and the SPI
         bus is the slowest thing in the loop.
       </p>
@@ -133,7 +133,7 @@
 
       <p>
         Six iterations give <strong>64 leaves</strong>. Each leaf is a 13-byte <code>Container</code>
-        whose derived geometry — centre, edges — comes from <code>constexpr</code> member functions
+        whose derived geometry (centre, edges) comes from <code>constexpr</code> member functions
         rather than stored fields, so it is recomputed on demand at zero storage cost. A tree node
         totals 17 bytes. Sectors are then randomly flagged as walls, with the spawn sector forced
         empty so every wall sits in front of the player at start.
@@ -211,8 +211,8 @@
         <strong>Why clip against all three planes and not just the near plane?</strong> With a
         near-plane clip alone, a wall edge running past the side of the FOV gets yanked forward to
         <code>depth = 1</code>. Its line height then blows up to full screen at the edge no matter
-        how far away the wall actually is — the classic "wall in your face" artifact when walking
-        parallel to a wall.
+        how far away the wall actually is. That is the classic "wall in your face" artifact when
+        walking parallel to a wall.
       </p>
 
       <h2>4. Per-column drawing and the delta redraw</h2>
@@ -258,15 +258,15 @@
       <p>
         Line height is perspective-correct: <code>line_height = WALL_PROJ_SCALE / depth</code>.
         Across a wall it is <code>1/depth</code>, not <code>depth</code> itself, that is interpolated
-        linearly between the endpoints — the same correction the PlayStation 1 famously skipped,
-        which is why its textures wobble.
+        linearly between the endpoints. This is the same correction the PlayStation 1 famously
+        skipped, which is why its textures wobble.
       </p>
 
       <h2>5. HUD overlays</h2>
       <p>
         Two cosmetic overlays are drawn on top of the world each frame, after the column cleanup
         pass. Each is gated by an <code>#if</code> on its toggle in <code>BSP_Settings.h</code>, so
-        turning one off removes both the data and the call sites at compile time — zero runtime cost
+        turning one off removes both the data and the call sites at compile time, zero runtime cost
         when disabled.
       </p>
       <ul>
@@ -277,7 +277,7 @@
       <h2>The game on top</h2>
       <p>
         Boot opens a two-entry menu. <strong>PLAY</strong> generates a BSP world with randomly
-        coloured walls and drops you into a corner with the map boundary at your back — no enemies,
+        coloured walls and drops you into a corner with the map boundary at your back. No enemies,
         no goal, just walk around and watch the renderer hold up. <strong>RAYCAST</strong> opens the
         Lode-style raycaster path instead, with its own grid map editor: place walls in a 24 × 24
         grid, then step into first-person view.
