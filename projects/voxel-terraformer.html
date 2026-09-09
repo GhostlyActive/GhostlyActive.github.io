@@ -24,6 +24,10 @@
 
 <a class="skip-link" href="#main">Skip to content</a>
 
+<svg class="visually-hidden" aria-hidden="true" focusable="false">
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></symbol>
+</svg>
+
 <nav class="site-nav">
   <div class="shell site-nav__inner">
     <a class="site-nav__brand" href="../index.html">
@@ -55,6 +59,7 @@
       </p>
       <div class="project-header__actions">
         <a class="btn btn--primary" href="https://github.com/GhostlyActive/VoxelTerraformer" rel="noopener">View source</a>
+        <a class="btn" href="https://www.youtube.com/watch?v=vWNqucjytic" rel="noopener">Watch on YouTube</a>
       </div>
     </header>
 
@@ -73,8 +78,8 @@
                poster="../assets/img/projects/voxel-terraformer-demo.jpg"
                width="640" height="360"
                autoplay muted loop playsinline preload="metadata"
-               aria-label="A rocket launches into the clouds, falls back and blows a crater into the voxel terrain, which is then shown again in smooth mode"></video>
-        <figcaption>A rocket goes up, comes down and leaves a crater. Then the same crater in smooth mode.</figcaption>
+               aria-label="A flight over voxel terrain and out into the solar system, past a ringed planet and the sun"></video>
+        <figcaption>Terrain first, then out into the solar system: a ringed planet and the sun, same engine and same world.</figcaption>
       </figure>
     </div>
 
@@ -181,6 +186,16 @@
       </div>
     </div>
 
+    <div class="media-block reveal">
+      <h2 class="visually-hidden">Video</h2>
+      <button class="video" type="button" data-video-id="vWNqucjytic" data-video-title="VoxelTerraformer — Endless Voxel World">
+        <img src="../assets/img/video/vWNqucjytic.jpg" width="960" height="540" alt="Arches and overhangs carved into green voxel terrain in smooth mode" loading="lazy" decoding="async">
+        <span class="video__play"><svg aria-hidden="true"><use href="#i-play"></use></svg></span>
+        <span class="video__duration">1:10</span>
+        <span class="visually-hidden">Play video: VoxelTerraformer — Endless Voxel World</span>
+      </button>
+    </div>
+
     <nav class="pager reveal" aria-label="More projects">
       <a href="ghost-morse-telegraph.html"><span>← Previous</span><strong>Ghost Morse Telegraph</strong></a>
       <a href="voxel-pi.html"><span>Next →</span><strong>VoxelPi</strong></a>
@@ -196,6 +211,7 @@
   </div>
 </footer>
 
+<script src="../assets/js/video.js" defer></script>
 <script src="../assets/js/reveal.js" defer></script>
 </body>
 </html>
