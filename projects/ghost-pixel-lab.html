@@ -97,6 +97,12 @@
         present. <code>core::files</code> picks whichever is available at boot and every app shares
         the same layout, so an app never needs to know which one it got.
       </p>
+      <p>
+        The bigger apps keep their internals apart from the board: they depend on nothing but a
+        drawing surface, and a handful of stubs stand in for it on a PC. So the BASIC interpreter,
+        the orbits, the flight model and both renderers build and run on the host in about a
+        second, with test suites of their own that never touch the hardware.
+      </p>
 
       <div class="data-table">
         <table>

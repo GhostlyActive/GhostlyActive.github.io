@@ -87,15 +87,16 @@
         </div>
 
         <figure class="media-panel">
-          <video src="assets/img/projects/ghost-pixel-lab-flight-hero.mp4"
-                 poster="assets/img/projects/ghost-pixel-lab-flight-hero.jpg"
-                 width="328" height="224"
+          <video src="assets/img/projects/hero-montage.mp4"
+                 poster="assets/img/projects/hero-montage.jpg"
+                 width="640" height="360"
                  autoplay muted loop playsinline preload="metadata"
-                 aria-label="Outer Pixels: flying between orbiting planets, rendered on a 1.8-inch AMOLED panel"></video>
+                 aria-label="Five projects in a row: Pong on an Arduino, a space sim on an ESP32, VoxelSpace terrain on a Raspberry Pi, a C# voxel world, and planets in Unreal Engine 5"></video>
           <figcaption>
-            <strong>Outer Pixels</strong> — a space sim on an ESP32-S3, drawn without a 3D engine.
-            368 × 448 AMOLED.
-            <a href="projects/ghost-pixel-lab.html">How it works →</a>
+            <strong>Five stops up the stack</strong> — Ghost Station on an Arduino, Outer Pixels on
+            an ESP32-S3, VoxelPi on a Raspberry Pi, VoxelTerraformer in C#, Gravity Bang Bang in
+            Unreal Engine.
+            <a href="#builds">The projects →</a>
           </figcaption>
         </figure>
       </div>
@@ -150,9 +151,13 @@
 
       <div class="work-grid" id="builds-grid">
 
-        <article class="work-card reveal" data-topics="Engines &amp; renderers|Embedded|Voxel|Games">
+        <article class="work-card work-card--feature reveal" data-topics="Engines &amp; renderers|Embedded|Voxel|Games">
           <div class="work-card__media">
-            <img src="assets/img/video/ePTqaHAo_ig.jpg" width="960" height="540" alt="The handheld board held over an Xbox controller, orbit paths and a sun drawn on the AMOLED panel" loading="lazy" decoding="async">
+            <video src="assets/img/projects/ghost-pixel-lab-flight.mp4"
+                   poster="assets/img/projects/ghost-pixel-lab-flight.jpg"
+                   width="400" height="224"
+                   data-play-in-view data-decorative muted loop playsinline preload="none"
+                   aria-label="Outer Pixels: flying between orbiting planets on the 1.8-inch AMOLED panel"></video>
             <span class="work-card__year">2026</span>
           </div>
           <div class="work-card__body">
@@ -164,7 +169,7 @@
               experiments behind a touch launcher.
             </p>
             <ul class="tag-row">
-              <li class="tag tag--accent">C++17</li>
+              <li class="tag tag--accent">Modern C++</li>
               <li class="tag">ESP32-S3</li>
               <li class="tag">AMOLED / QSPI</li>
               <li class="tag">BASIC interpreter</li>
@@ -172,6 +177,39 @@
             </ul>
             <div class="work-card__foot">
               <span>Sandbox · active</span>
+              <span class="work-card__more">Read more →</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="work-card work-card--feature reveal" data-topics="Engines &amp; renderers|Voxel|Games">
+          <div class="work-card__media">
+            <video src="assets/img/projects/voxel-terraformer-demo.mp4"
+                   poster="assets/img/projects/voxel-terraformer-demo.jpg"
+                   width="640" height="360"
+                   data-play-in-view data-decorative muted loop playsinline preload="none"
+                   aria-label="Voxel terrain in blocks and smooth mode, then planets orbiting a sun"></video>
+            <span class="work-card__year">2026</span>
+          </div>
+          <div class="work-card__body">
+            <p class="work-card__kicker">C# · raylib</p>
+            <h3 class="work-card__title"><a href="projects/voxel-terraformer.html">VoxelTerraformer</a></h3>
+            <p class="work-card__desc">
+              A voxel engine in C# and raylib with four games on top: a terraforming sandbox, a
+              rocket-defence game, a cave dive, and a solar system with planets kilometres across,
+              atmospheres and real gravity. One world, three representations — blocks, sculpt,
+              marching-cubes smooth — switched mid-play without losing an edit.
+            </p>
+            <ul class="tag-row">
+              <li class="tag tag--accent">C#</li>
+              <li class="tag">raylib</li>
+              <li class="tag">4 games</li>
+              <li class="tag">Marching cubes</li>
+              <li class="tag">LOD</li>
+              <li class="tag">Playable build</li>
+            </ul>
+            <div class="work-card__foot">
+              <span>Playable build for Windows, macOS, Linux</span>
               <span class="work-card__more">Read more →</span>
             </div>
           </div>
@@ -199,32 +237,6 @@
             </ul>
             <div class="work-card__foot">
               <span>Hardware build</span>
-              <span class="work-card__more">Read more →</span>
-            </div>
-          </div>
-        </article>
-
-        <article class="work-card reveal" data-topics="Engines &amp; renderers|Voxel">
-          <div class="work-card__media">
-            <img src="assets/img/video/vWNqucjytic.jpg" width="960" height="540" alt="Arches and overhangs carved into green voxel terrain in smooth mode, under a cloudy blue sky" loading="lazy" decoding="async">
-            <span class="work-card__year">2026</span>
-          </div>
-          <div class="work-card__body">
-            <p class="work-card__kicker">C# · raylib</p>
-            <h3 class="work-card__title"><a href="projects/voxel-terraformer.html">VoxelTerraformer</a></h3>
-            <p class="work-card__desc">
-              An endless voxel world with real-time terraforming, streamed in and meshed off the
-              render frame. The same terrain can be edited as blocks, sculpted with a sphere brush,
-              or rendered smooth via marching cubes, switchable mid-play.
-            </p>
-            <ul class="tag-row">
-              <li class="tag tag--accent">C#</li>
-              <li class="tag">raylib</li>
-              <li class="tag">Endless world</li>
-              <li class="tag">Marching cubes</li>
-            </ul>
-            <div class="work-card__foot">
-              <span>Technical sandbox</span>
               <span class="work-card__more">Read more →</span>
             </div>
           </div>
@@ -346,15 +358,29 @@
 
   <section class="section" id="studio">
     <div class="shell">
-      <div class="section__head reveal">
-        <span class="section__index">02 — Client work &amp; experiments</span>
-        <h2>Interactive installations, AR and virtual production</h2>
-        <p>
-          A mix of client projects and pieces I built to learn a tool properly. Museum exhibits and
-          expo applications, augmented reality on iPad, demonstrators and test rigs for industry, an
-          arcade racer and game demos, face tracking and virtual production in Unreal Engine, made
-          with Unity, Unreal Engine, and the microcontrollers that drive the hardware behind them.
-        </p>
+      <div class="section__head section__head--split reveal">
+        <div>
+          <span class="section__index">02 — Client work &amp; experiments</span>
+          <h2>Interactive installations, AR and virtual production</h2>
+          <p>
+            A mix of client projects and pieces I built to learn a tool properly. Museum exhibits and
+            expo applications, augmented reality on iPad, demonstrators and test rigs for industry, an
+            arcade racer and game demos, face tracking and virtual production in Unreal Engine, made
+            with Unity, Unreal Engine, and the microcontrollers that drive the hardware behind them.
+          </p>
+        </div>
+
+        <figure class="media-panel">
+          <video src="assets/img/projects/games-collection.mp4"
+                 poster="assets/img/projects/games-collection.jpg"
+                 width="400" height="224"
+                 data-play-in-view muted loop playsinline preload="none"
+                 aria-label="Showreel of Unity and Unreal Engine work: games, MetaHuman, virtual production and real-time 3D scenes"></video>
+          <figcaption>
+            <strong>Games &amp; real-time 3D</strong> — a showreel of Unity and Unreal Engine work:
+            2D and 3D games, MetaHuman, virtual production.
+          </figcaption>
+        </figure>
       </div>
 
       <div class="filter"
@@ -674,26 +700,14 @@
       <div class="contact__body reveal">
         <h2>Get in touch</h2>
         <a class="btn btn--primary" href="mailto:marlontamer@gmail.com">Write me an email</a>
-
-        <ul class="link-list">
-          <li><a href="https://github.com/GhostlyActive" rel="noopener">GitHub<span>@GhostlyActive</span></a></li>
-          <li><a href="https://www.youtube.com/channel/UC-lTk973ekuhM_iHE4gxODw/videos" rel="noopener">YouTube<span>40 project videos</span></a></li>
-          <li><a href="https://www.linkedin.com/in/marlon-t-831b982a4" rel="noopener">LinkedIn<span>marlon-t</span></a></li>
-          <li><a href="mailto:marlontamer@gmail.com">Email<span>marlontamer@gmail.com</span></a></li>
-        </ul>
       </div>
 
-      <figure class="media-panel">
-        <video src="assets/img/projects/games-collection.mp4"
-               poster="assets/img/projects/games-collection.jpg"
-               width="400" height="224"
-               data-play-in-view muted loop playsinline preload="none"
-               aria-label="Showreel of Unity and Unreal Engine work: games, MetaHuman, virtual production and real-time 3D scenes"></video>
-        <figcaption>
-          <strong>Games &amp; real-time 3D</strong> — a showreel of Unity and Unreal Engine work:
-          2D and 3D games, MetaHuman, virtual production.
-        </figcaption>
-      </figure>
+      <ul class="link-list reveal">
+        <li><a href="https://github.com/GhostlyActive" rel="noopener">GitHub<span>@GhostlyActive</span></a></li>
+        <li><a href="https://www.youtube.com/channel/UC-lTk973ekuhM_iHE4gxODw/videos" rel="noopener">YouTube<span>40 project videos</span></a></li>
+        <li><a href="https://www.linkedin.com/in/marlon-t-831b982a4" rel="noopener">LinkedIn<span>marlon-t</span></a></li>
+        <li><a href="mailto:marlontamer@gmail.com">Email<span>marlontamer@gmail.com</span></a></li>
+      </ul>
     </div>
   </section>
 

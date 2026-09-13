@@ -244,8 +244,8 @@
      right-hand side opens up. */
   .scene::after {
     background:
-      linear-gradient(97deg, var(--bg) 2%, rgba(11, 11, 13, 0.88) 30%, rgba(11, 11, 13, 0.1) 100%),
-      linear-gradient(to bottom, var(--bg) 0%, rgba(11, 11, 13, 0) 12%, rgba(11, 11, 13, 0) 84%, var(--bg) 100%);
+      linear-gradient(97deg, var(--bg) 2%, rgba(11, 11, 13, 0.86) 30%, rgba(11, 11, 13, 0.3) 62%, rgba(11, 11, 13, 0) 92%),
+      linear-gradient(to bottom, var(--bg) 0%, rgba(11, 11, 13, 0) 12%, rgba(11, 11, 13, 0) 88%, var(--bg) 100%);
   }
 
   /* The contact copy is a short column rather than a full headline block, so
@@ -272,7 +272,7 @@
   }
 }
 
-/* ---------- Framed clip — used by the hero and the contact section ---------- */
+/* ---------- Framed clip — used by the hero and the client-work head ---------- */
 
 .media-panel {
   margin: 0;
@@ -451,6 +451,22 @@
   color: var(--text-muted);
 }
 
+/* Same 1.2 / 0.8 split as the hero, so the showreel lands near its native
+   400 px and stays sharp. */
+.section__head--split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  gap: var(--space-7);
+  align-items: center;
+}
+
+@media (max-width: 62rem) {
+  .section__head--split {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+}
+
 /* ---------- Topic filter ---------- */
 
 /* The chips are built by filter.js — without it there is nothing to show. */
@@ -529,13 +545,16 @@
 
 /* ---------- Work grid (repositories) ---------- */
 
+/* Six columns so the two feature cards take half a row each and the rest run
+   three to a row; the same grid then holds both card sizes through a filter. */
 .work-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(21rem, 100%), 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: var(--space-5);
 }
 
 .work-card {
+  grid-column: span 2;
   display: flex;
   flex-direction: column;
   background: var(--bg-raised);
@@ -544,6 +563,48 @@
   overflow: hidden;
   transition: border-color 0.2s var(--ease), transform 0.2s var(--ease), box-shadow 0.2s var(--ease),
     opacity 0.22s var(--ease);
+}
+
+/* Declared after .work-card on purpose: same specificity, so order decides. */
+.work-card--feature {
+  grid-column: span 3;
+}
+
+@media (max-width: 62rem) {
+  .work-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .work-card {
+    grid-column: span 1;
+  }
+
+  .work-card--feature {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 46rem) {
+  .work-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .work-card,
+  .work-card--feature {
+    grid-column: auto;
+  }
+}
+
+.work-card--feature .work-card__media {
+  aspect-ratio: 16 / 9;
+}
+
+.work-card--feature .work-card__title {
+  font-size: var(--step-2);
+}
+
+.work-card--feature .work-card__desc {
+  font-size: var(--step-0);
 }
 
 .work-card:has(.work-card__title a:hover),
@@ -816,12 +877,10 @@
   padding-block: var(--space-9);
 }
 
-/* Same 1.2 / 0.8 split as the hero, so the clip lands at roughly its native
-   400 px and stays sharp. */
 .contact__grid {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: var(--space-7);
   align-items: center;
 }
@@ -839,13 +898,8 @@
   align-items: flex-start;
 }
 
-.contact__body .link-list {
-  align-self: stretch;
-  margin-top: var(--space-6);
-}
-
-/* The heading now sits straight above the button with no paragraph between
-   them, so it needs the wider gap. */
+/* The heading sits straight above the button with no paragraph between them,
+   so it needs the wider gap. */
 .contact h2 {
   font-size: var(--step-3);
   margin-bottom: var(--space-5);

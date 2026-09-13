@@ -3,11 +3,13 @@ const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").match
 /**
  * Looping clips autoplay by default, which CSS alone cannot switch off — so a
  * visitor who asked for reduced motion gets a still frame and a play control.
+ * A decorative clip inside a card gets the still frame only: the card is one
+ * big link, so controls there could never be reached.
  */
 if (reduceMotion) {
   for (const clip of document.querySelectorAll("video[autoplay], video[data-play-in-view]")) {
     clip.autoplay = false;
-    clip.controls = true;
+    clip.controls = !clip.hasAttribute("data-decorative");
     clip.pause();
   }
 }

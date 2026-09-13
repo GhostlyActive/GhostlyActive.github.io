@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>VoxelTerraformer — GhostlyActive</title>
-<meta name="description" content="An experimental voxel engine in C# and raylib: an endless streaming world where the same terrain can be edited as blocks, sculpted, or rendered smooth with marching cubes.">
+<meta name="description" content="A voxel engine in C# on raylib with four games on it: a terraforming sandbox, a rocket-defence game, a cave dive and a solar system with planets kilometres across. Blocks, sculpt or marching-cubes smooth, switched mid-play.">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#0b0b0d">
 <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
@@ -53,12 +53,14 @@
       <p class="project-header__kicker">Own build · 2026</p>
       <h1>VoxelTerraformer</h1>
       <p class="project-header__lede">
-        An experimental voxel world in C#, focused on an endless streaming terrain, real-time
-        terraforming and a clean, extensible architecture. The goal was never a finished game. It is a
-        technical sandbox for working out how voxel engines hold together.
+        A voxel engine written in C# on raylib — no game engine underneath — and four games built on
+        it. It started as an experiment in streaming terrain and grew into a playground for one idea:
+        one world, several ways of representing and editing it, from whole blocks to smooth, fully
+        sculptable ground.
       </p>
       <div class="project-header__actions">
-        <a class="btn btn--primary" href="https://github.com/GhostlyActive/VoxelTerraformer" rel="noopener">View source</a>
+        <a class="btn btn--primary" href="https://github.com/GhostlyActive/VoxelTerraformer/releases" rel="noopener">Download build</a>
+        <a class="btn" href="https://github.com/GhostlyActive/VoxelTerraformer" rel="noopener">View source</a>
         <a class="btn" href="https://www.youtube.com/watch?v=vWNqucjytic" rel="noopener">Watch on YouTube</a>
       </div>
     </header>
@@ -67,8 +69,8 @@
       <div><dt>Language</dt><dd>C#</dd></div>
       <div><dt>Rendering</dt><dd>raylib</dd></div>
       <div><dt>World</dt><dd>Endless, streamed in around the player</dd></div>
-      <div><dt>Modes</dt><dd>Blocks, sculpt, smooth</dd></div>
-      <div><dt>Meshing</dt><dd>Threaded, off the render frame</dd></div>
+      <div><dt>Games</dt><dd>Four, on one engine</dd></div>
+      <div><dt>Builds</dt><dd>Windows · macOS · Linux, self-contained</dd></div>
     </dl>
 
     <div class="media-block reveal">
@@ -78,21 +80,33 @@
                width="640" height="360"
                autoplay muted loop playsinline preload="metadata"
                aria-label="Voxel terrain in blocks and smooth mode, then a separate scene of planets orbiting a sun"></video>
-        <figcaption>Two separate scenes, not one world: the terrain sandbox first, then a small planet-and-sun game built on the same voxel engine.</figcaption>
+        <figcaption>Two of the four games: the terraforming sandbox first, then the Solar System on the same engine.</figcaption>
       </figure>
     </div>
 
     <div class="prose">
 
-      <h2>What it does</h2>
-      <ul>
-        <li>Endless world that streams in around you, with manual save and load</li>
-        <li>Three voxel modes over one terrain, switchable mid-play</li>
-        <li>Terrain meshed in the background, so building and digging never stall the frame</li>
-        <li>Ambient occlusion, a day/night cycle, distance fog, stars and drifting clouds</li>
-        <li>Sub-voxel collision, so you can walk into the holes you drilled</li>
-        <li>Live tuning menu for movement, gravity and brush settings</li>
-      </ul>
+      <h2>Four games, one engine</h2>
+      <p>
+        The engine takes care of the world, terrain generation, chunk streaming, meshing, rendering,
+        input, UI and audio. The games are separate projects on top of it, switchable at any time
+        from the pause menu.
+      </p>
+
+      <div class="data-table">
+        <table>
+          <caption class="visually-hidden">The four games</caption>
+          <thead>
+            <tr><th scope="col">Game</th><th scope="col">What you do</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Free Walk</td><td>The sandbox. Build, dig, switch between the three voxel modes. Mountains and caves reach 256 blocks in height; there is a jetpack.</td></tr>
+            <tr><td>Rocket Storm</td><td>Survive waves of rockets — standard, cluster, buster and seeker — in smooth mode. Dig cover, shoot them down with the flak, climb the local leaderboard.</td></tr>
+            <tr><td>Solar System</td><td>Planets two to four kilometres across with atmospheres, rings, an asteroid belt and real gravity. Fly in six degrees of freedom and dive into an atmosphere. Two of the cores are molten.</td></tr>
+            <tr><td>Cave Dive</td><td>An underground world in the dark, smooth mode only. A lantern to see by, lamps to leave as markers, crystals to dig out of the walls.</td></tr>
+          </tbody>
+        </table>
+      </div>
 
       <h2>Three modes, one world</h2>
       <p>
@@ -116,6 +130,12 @@
         </table>
       </div>
 
+      <p>
+        The switch itself is visible: the new mode spreads across the terrain as a coloured ring,
+        rebuilding the nearest chunks first, and the ring only advances as far as the terrain has
+        actually been remeshed — so it doubles as a progress bar for the background workers.
+      </p>
+
       <h2>Why raycasting is the hard part</h2>
       <p>
         Placing a block is easy once you know <em>which</em> block the cursor is pointing at, and
@@ -125,13 +145,20 @@
         placement lands on the correct adjacent face rather than one voxel off.
       </p>
 
-      <h2>Meshing off the frame</h2>
+      <h2>How it scales</h2>
       <p>
-        Rebuilding a chunk mesh is expensive, and marching cubes makes it more so. Doing that work
-        inline would turn every edit into a visible hitch, so meshing runs on background threads and
-        the finished mesh is handed back to the renderer when it is ready. The same applies to the
-        chunks streaming in ahead of the player: the world grows at the edges without the frame
-        noticing.
+        The world is divided into chunks 32 blocks wide and up to 256 blocks tall. Chunks that hold
+        nothing but sky or solid rock are skipped outright. Around the player, chunks are generated
+        on worker threads as they come into range, and a chunk is meshed once its neighbours exist,
+        so the world grows at the edges without the frame noticing.
+      </p>
+      <p>
+        Near chunks are split into four sections and rendered in full detail; an edit rebuilds only
+        the sections it touched, and those rebuilds jump the queue so digging never stalls. Chunks
+        further out are merged into 2 m and 4 m sections instead, which keeps the amount of geometry in
+        check as the view distance grows. Rebuilding a chunk mesh is expensive, and marching
+        cubes makes it more so — doing that inline would turn every edit into a visible hitch, so all
+        of it runs off the render frame and the finished mesh is handed back when it is ready.
       </p>
 
       <h2>The architecture is the point</h2>
@@ -142,6 +169,13 @@
         and a second mesher can be bolted on beside the first, without any of that leaking into game
         logic.
       </p>
+      <p>
+        The engine builds as one library; each game is its own project that references the engine
+        and cannot see the other games. A game is a class with a <code>[GameDefinition]</code>
+        attribute, and the launcher finds them by that attribute — adding a fifth means a new folder
+        and one derived class. The engine's pure logic is covered by xunit tests that run without a
+        window.
+      </p>
 
       <div class="data-table">
         <table>
@@ -150,15 +184,15 @@
             <tr><th scope="col">Action</th><th scope="col">Input</th></tr>
           </thead>
           <tbody>
-            <tr><td>Move and look</td><td><code>W</code> <code>A</code> <code>S</code> <code>D</code>, mouse</td></tr>
-            <tr><td>Sprint, jump</td><td><code>Shift</code>, <code>Space</code></td></tr>
-            <tr><td>Remove, place</td><td>Left, right mouse button (hold in sculpt and smooth mode)</td></tr>
-            <tr><td>Build distance</td><td>Mouse wheel</td></tr>
-            <tr><td>Brush size</td><td><code>Ctrl</code> + mouse wheel</td></tr>
+            <tr><td>Move and look</td><td><code>W</code> <code>A</code> <code>S</code> <code>D</code>, mouse — in Solar System with no fixed up direction</td></tr>
+            <tr><td>Sprint, jump, jetpack</td><td><code>Shift</code>, <code>Space</code>, hold <code>Space</code> in the air</td></tr>
+            <tr><td>Roll the ship</td><td><code>Q</code>, <code>E</code></td></tr>
+            <tr><td>Remove, place</td><td>Left, right mouse button — hold in sculpt and smooth mode, charge and fire in Solar System</td></tr>
+            <tr><td>Build distance, brush size</td><td>Mouse wheel, <code>Ctrl</code> + mouse wheel</td></tr>
             <tr><td>Switch voxel mode</td><td><code>V</code></td></tr>
-            <tr><td>Slower, faster day</td><td><code>Z</code>, <code>U</code></td></tr>
-            <tr><td>Tuning menu, debug overlay</td><td><code>M</code>, <code>F3</code></td></tr>
-            <tr><td>Pause menu: save, load, quit</td><td><code>ESC</code></td></tr>
+            <tr><td>Flak, full stop</td><td><code>F</code></td></tr>
+            <tr><td>Move the sun, clock speed</td><td><code>Z</code>, <code>U</code></td></tr>
+            <tr><td>Tuning menu, debug overlay, pause menu</td><td><code>M</code>, <code>F3</code>, <code>ESC</code></td></tr>
           </tbody>
         </table>
       </div>
@@ -166,8 +200,8 @@
       <p>
         raylib was chosen deliberately over a full engine: it hands you a window, an input queue and
         a draw call, and nothing else. Everything above that — chunk meshing, the terrain generator,
-        the raycast, the marching-cubes pass — had to be written, which was the entire point of the
-        exercise.
+        the raycast, the marching-cubes pass, the orbital gravity — had to be written, which was the
+        entire point of the exercise.
       </p>
 
     </div>
@@ -176,7 +210,7 @@
       <div class="gallery">
         <figure class="figure">
           <img src="../assets/img/projects/voxel-terraformer-1.jpg" width="1280" height="720" alt="Blocks mode: two spheres carved out of green voxel terrain as stepped cubes, under a cloudy blue sky" loading="lazy" decoding="async">
-          <figcaption>Blocks mode: the same two carved spheres, stepped into cubes.</figcaption>
+          <figcaption>Blocks mode: two carved spheres, stepped into cubes.</figcaption>
         </figure>
         <figure class="figure">
           <img src="../assets/img/projects/voxel-terraformer-2.jpg" width="1280" height="720" alt="Smooth mode: the same two carved spheres rendered as rounded surfaces over softly rolling green terrain" loading="lazy" decoding="async">
