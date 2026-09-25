@@ -241,18 +241,22 @@
   }
 
   /* The copy sits in the left column, so the wash turns diagonal and the
-     right-hand side opens up. */
+     right-hand side opens up. The facts run the full width along the foot,
+     over the nearest and brightest terrain, so the bottom closes in again
+     before they start. */
   .scene::after {
     background:
       linear-gradient(97deg, var(--bg) 2%, rgba(11, 11, 13, 0.86) 30%, rgba(11, 11, 13, 0.3) 62%, rgba(11, 11, 13, 0) 92%),
-      linear-gradient(to bottom, var(--bg) 0%, rgba(11, 11, 13, 0) 12%, rgba(11, 11, 13, 0) 88%, var(--bg) 100%);
+      linear-gradient(to bottom, var(--bg) 0%, rgba(11, 11, 13, 0) 12%, rgba(11, 11, 13, 0) 60%, rgba(11, 11, 13, 0.5) 76%, var(--bg) 100%);
   }
 
   /* The contact copy is a short column rather than a full headline block, so
-     the corridor can come up sooner. */
+     the corridor can come up sooner — but not all the way: the link list sits
+     on the right, and below about 0.6 the lit walls passing behind it pull its
+     small grey type under 4.5:1. */
   .contact__scene::after {
     background:
-      linear-gradient(97deg, var(--bg) 2%, rgba(11, 11, 13, 0.84) 24%, rgba(11, 11, 13, 0.04) 100%),
+      linear-gradient(97deg, var(--bg) 2%, rgba(11, 11, 13, 0.84) 24%, rgba(11, 11, 13, 0.6) 100%),
       linear-gradient(to bottom, var(--bg) 0%, rgba(11, 11, 13, 0) 16%, rgba(11, 11, 13, 0) 80%, var(--bg) 100%);
   }
 }
@@ -287,15 +291,19 @@
   box-shadow: var(--shadow-lift), 0 0 70px -24px var(--accent);
 }
 
-/* Both captions sit on top of a canvas scene, so they get the muted tier
-   rather than the faint one — over the terrain silhouette the faint grey is
-   below the contrast floor. */
+/* The muted tier rather than the faint one. The hero's caption sits on the
+   terrain, where even the muted grey drops under 4.5:1 whenever a lit slope
+   passes behind it, so that one takes the text colour. */
 .media-panel figcaption {
   margin-top: var(--space-4);
   font-family: var(--font-mono);
   font-size: var(--step--2);
   line-height: 1.7;
   color: var(--text-muted);
+}
+
+.hero .media-panel figcaption {
+  color: var(--text);
 }
 
 .media-panel figcaption strong {
@@ -366,11 +374,13 @@
 
 /* Same label-over-value pair as the spec strip on a project page, and it reads
    the same way: the label is the quiet one, the value carries the text colour.
-   Two greys a step apart made the two lines look like one block. */
+   Two greys a step apart made the two lines look like one block. The label is
+   a step lighter than the spec strip's, though — it sits on the terrain, where
+   the faint grey falls under 4.5:1. */
 .hero__fact dt {
   font-family: var(--font-mono);
   font-size: var(--step--2);
-  color: var(--text-faint);
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin-bottom: var(--space-1);
@@ -931,8 +941,9 @@
   padding-left: var(--space-2);
 }
 
+/* Muted like the labels, not faint: the list sits on the corridor. */
 .link-list span {
-  color: var(--text-faint);
+  color: var(--text-muted);
 }
 
 /* ---------- Footer ---------- */
