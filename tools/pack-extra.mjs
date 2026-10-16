@@ -54,6 +54,13 @@ function validate(cards, markup) {
     for (const field of ["id", "title", "topics", "tags"]) {
       if (!card[field] || card[field].length === 0) problems.push(`${where}: "${field}" is missing`);
     }
+    // Not used by the page; kept as a record and checked so it stays tidy.
+    if (card.date && !/^\d{4}(-\d{2})?$/.test(card.date)) {
+      problems.push(`${where}: date "${card.date}" is not YYYY or YYYY-MM`);
+    }
+    if (card.duration && !/^\d+:\d{2}$/.test(card.duration)) {
+      problems.push(`${where}: duration "${card.duration}" is not m:ss`);
+    }
     for (const topic of card.topics ?? []) {
       if (!declared.has(topic)) problems.push(`${where}: topic "${topic}" has no chip in index.html`);
     }

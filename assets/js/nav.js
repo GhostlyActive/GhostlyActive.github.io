@@ -100,7 +100,7 @@
         // A section anchor is stale after this, but the reel key in the fragment
         // is what unlocked the page — that one stays.
         if (/^#(top|builds|studio|contact)$/.test(location.hash)) {
-          history.replaceState(null, "", location.pathname + location.search);
+          history.replaceState(null, "", location.pathname);
         }
 
         update(true);

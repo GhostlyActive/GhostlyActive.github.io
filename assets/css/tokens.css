@@ -13,11 +13,15 @@
   --text-muted: #9d9a92;
   --text-faint: #8b8880;
 
-  --accent: #ffa62b;
-  --accent-soft: rgba(255, 166, 43, 0.12);
-  --accent-line: rgba(255, 166, 43, 0.32);
-  --cyan: #5cd2e6;
-  --cyan-soft: rgba(92, 210, 230, 0.11);
+  --accent: #ff6a1f;
+  --accent-rgb: 255, 106, 31;
+  --accent-bright: #ff8a4d;
+  --accent-soft: rgba(var(--accent-rgb), 0.12);
+  --accent-line: rgba(var(--accent-rgb), 0.32);
+  --client: #8b96ff;
+  --client-rgb: 139, 150, 255;
+  --client-soft: rgba(var(--client-rgb), 0.11);
+  --client-line: rgba(var(--client-rgb), 0.28);
 
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;

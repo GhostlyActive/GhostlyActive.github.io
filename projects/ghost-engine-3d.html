@@ -52,7 +52,7 @@
     </a>
     <ul class="site-nav__links">
       <li><a href="../index.html#builds">Builds</a></li>
-      <li><a href="../index.html#studio"><span class="label-long">Work &amp; experiments</span><span class="label-short">Work</span></a></li>
+      <li><a href="../index.html#studio"><span class="label-long">Client work</span><span class="label-short">Work</span></a></li>
       <li><a href="../index.html#contact">Contact</a></li>
     </ul>
   </div>
@@ -116,6 +116,19 @@
         <li>Depth buffer</li>
         <li>GUI system built on Dear ImGui</li>
       </ul>
+
+      <h2>Resizing is where it breaks</h2>
+      <p>
+        One item on that list is harder than it reads. DirectX refuses to resize a swap chain
+        while anything still holds a reference to its back buffer, and the render target view
+        does exactly that; the depth buffer is sized to match it, and the viewport carries the
+        old dimensions. So a resize is a teardown in a fixed order: release the views, call
+        <code>ResizeBuffers</code>, fetch the new back buffer, build both views again, reset the
+        viewport. Leave one reference alive and the call fails with
+        <code>DXGI_ERROR_INVALID_CALL</code> while the window keeps showing a stretched frame.
+        Getting that sequence right once, in one place, is what made every later feature safe to
+        add.
+      </p>
 
       <h2>Why the tool layer mattered</h2>
       <p>
@@ -182,6 +195,7 @@
 </footer>
 
 <script src="../assets/js/video.js" defer></script>
+<script src="../assets/js/lightbox.js" defer></script>
 <script src="../assets/js/reveal.js" defer></script>
 </body>
 </html>

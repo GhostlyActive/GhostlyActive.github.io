@@ -52,7 +52,7 @@
     </a>
     <ul class="site-nav__links">
       <li><a href="../index.html#builds">Builds</a></li>
-      <li><a href="../index.html#studio"><span class="label-long">Work &amp; experiments</span><span class="label-short">Work</span></a></li>
+      <li><a href="../index.html#studio"><span class="label-long">Client work</span><span class="label-short">Work</span></a></li>
       <li><a href="../index.html#contact">Contact</a></li>
     </ul>
   </div>
@@ -275,6 +275,19 @@
         skipped, which is why its textures wobble.
       </p>
 
+      <h2>The raycaster, live</h2>
+      <p>
+        The same grid walk, running in this tab. Drag the player on the map to move it, drag
+        anywhere else to aim, or use the arrow keys once the map has focus. Every column on the
+        right is one ray, and a ray stops at the first wall it meets: that is the whole reason
+        nothing in the frame is ever drawn twice.
+      </p>
+      <div class="raycaster" data-raycaster>
+        <canvas class="raycaster__map" data-map width="320" height="320" tabindex="0" aria-label="Map from above. Drag the player to move, drag elsewhere to aim, or use the arrow keys."></canvas>
+        <canvas class="raycaster__view" data-view width="128" height="128" aria-label="The view those rays produce, one column per ray"></canvas>
+        <p class="raycaster__foot"><span data-readout>128 rays</span><span>128 × 128, the panel's resolution. Flat colour instead of texture; the walk is the same.</span></p>
+      </div>
+
       <h2>5. HUD overlays</h2>
       <p>
         Two cosmetic overlays are drawn on top of the world each frame, after the column cleanup
@@ -362,6 +375,8 @@
 </footer>
 
 <script src="../assets/js/video.js" defer></script>
+<script src="../assets/js/lightbox.js" defer></script>
 <script src="../assets/js/reveal.js" defer></script>
+<script src="../assets/js/raycast-explainer.js" defer></script>
 </body>
 </html>

@@ -52,7 +52,7 @@
     </a>
     <ul class="site-nav__links">
       <li><a href="../index.html#builds">Builds</a></li>
-      <li><a href="../index.html#studio"><span class="label-long">Work &amp; experiments</span><span class="label-short">Work</span></a></li>
+      <li><a href="../index.html#studio"><span class="label-long">Client work</span><span class="label-short">Work</span></a></li>
       <li><a href="../index.html#contact">Contact</a></li>
     </ul>
   </div>
@@ -154,6 +154,28 @@
 === Done.</pre>
       </div>
 
+      <h2>Try the timing</h2>
+      <p>
+        Type something and the key below taps it out in the proportions the replay uses: a dash
+        three dots long, three units between letters, seven between words. The readout mirrors
+        the OLED.
+      </p>
+      <div class="morse" data-morse>
+        <form class="morse__form">
+          <label class="visually-hidden" for="morse-text">Text to key out</label>
+          <input class="morse__input" id="morse-text" type="text" value="GHOST" maxlength="32" autocomplete="off" spellcheck="false">
+          <button class="btn btn--primary" type="submit">Tap it out</button>
+          <button class="btn" type="button" data-sound aria-pressed="true">Sound on</button>
+        </form>
+        <div class="morse__screen">
+          <span class="morse__key" aria-hidden="true"></span>
+          <p class="morse__idle" aria-hidden="true">Ghost Morse<span>type a word, then tap it out</span></p>
+          <output class="morse__letter" data-letter aria-hidden="true"></output>
+          <output class="morse__code" data-code aria-hidden="true"></output>
+          <output class="morse__sentence" data-sentence aria-live="polite"></output>
+        </div>
+      </div>
+
       <h2>Driving the coil</h2>
       <p>
         The interesting part of the electronics is not the switching, it is the power. The solenoid
@@ -247,6 +269,8 @@
 </footer>
 
 <script src="../assets/js/video.js" defer></script>
+<script src="../assets/js/lightbox.js" defer></script>
 <script src="../assets/js/reveal.js" defer></script>
+<script src="../assets/js/morse.js" defer></script>
 </body>
 </html>

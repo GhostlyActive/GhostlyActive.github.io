@@ -65,7 +65,14 @@ function buildCard(card) {
   label.className = "visually-hidden";
   label.textContent = `Play video: ${card.title}`;
 
-  button.append(poster, play, label);
+  button.append(poster, play);
+  if (card.duration) {
+    const duration = document.createElement("span");
+    duration.className = "video__duration";
+    duration.textContent = card.duration;
+    button.append(duration);
+  }
+  button.append(label);
 
   const body = document.createElement("div");
   body.className = "reel-card__body";
@@ -84,7 +91,7 @@ function buildCard(card) {
   tags.className = "tag-row";
   card.tags.forEach((tag, index) => {
     const item = document.createElement("li");
-    item.className = index === 0 ? "tag tag--cyan" : "tag";
+    item.className = index === 0 ? "tag tag--client" : "tag";
     item.textContent = tag;
     tags.append(item);
   });
@@ -99,6 +106,22 @@ function buildCard(card) {
 
   article.append(button, body);
   return article;
+}
+
+/** Adds the unlisted clients to the "Built for" line, skipping names already on it. */
+function addClients(cards) {
+  const list = document.querySelector(".clients__list");
+  if (!list) return;
+
+  const shown = new Set(list.textContent.split("·").map((name) => name.trim()));
+  const fresh = [];
+  for (const { client } of cards) {
+    if (client && !shown.has(client)) {
+      shown.add(client);
+      fresh.push(client);
+    }
+  }
+  if (fresh.length > 0) list.textContent += ` · ${fresh.join(" · ")}`;
 }
 
 async function unlock() {
@@ -122,7 +145,10 @@ async function unlock() {
   );
 
   const { cards } = JSON.parse(new TextDecoder().decode(plain));
+  // Appended in the order extra.json lists them, after the public cards, which
+  // keep the order they have in the markup. Both orders are deliberate.
   grid.append(...cards.map(buildCard));
+  addClients(cards);
 
   try {
     sessionStorage.setItem(STORE_KEY, token);

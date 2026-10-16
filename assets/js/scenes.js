@@ -144,8 +144,8 @@
         } else {
           const t = Math.pow((shaped - 0.55) / 0.45, 1.25);
           r = mix(104, 255, t);
-          g = mix(90, 176, t);
-          b = mix(84, 72, t);
+          g = mix(90, 148, t);
+          b = mix(84, 64, t);
         }
 
         surface[index] = pack(r * light, g * light, b * light);
@@ -159,7 +159,7 @@
       sky = new Uint32Array(buffer.height);
       for (let y = 0; y < buffer.height; y += 1) {
         const t = fade(clamp(y / (buffer.height * 0.6), 0, 1));
-        sky[y] = pack(mix(9, 88, t), mix(9, 55, t), mix(11, 37, t));
+        sky[y] = pack(mix(9, 96, t), mix(9, 46, t), mix(11, 30, t));
       }
     }
 
@@ -204,9 +204,9 @@
           if (top < bottom) {
             const colour = surface[offset];
             const shade = pack(
-              mix(colour & 0xff, 66, haze),
-              mix((colour >> 8) & 0xff, 43, haze),
-              mix((colour >> 16) & 0xff, 31, haze),
+              mix(colour & 0xff, 72, haze),
+              mix((colour >> 8) & 0xff, 40, haze),
+              mix((colour >> 16) & 0xff, 28, haze),
             );
 
             for (let y = Math.max(top, 0); y < bottom; y += 1) {
@@ -245,10 +245,10 @@
     let ceiling = null;
 
     /**
-     * Four 32×32 surfaces built from arithmetic — an amber panel, slate brick,
+     * Four 32×32 surfaces built from arithmetic — an orange panel, slate brick,
      * a blue plate carrying a magenta light strip, and the floor tiling. The
      * blue and the magenta are the logo's colours; they are the only place on
-     * the site outside the mark that is not amber.
+     * the site outside the mark that is not orange.
      */
     function buildTextures() {
       const noise = seeded(0x77a11);
@@ -265,12 +265,12 @@
             let b;
 
             if (id === 0) {
-              // Amber panel: horizontal seams with a rivet at each end.
+              // Orange panel: horizontal seams with a rivet at each end.
               const seam = y % 11 === 0;
               const rivet = seam && (x % 11 === 3 || x % 11 === 8);
-              r = rivet ? 255 : seam ? 96 : 168;
-              g = rivet ? 190 : seam ? 60 : 108;
-              b = rivet ? 96 : seam ? 22 : 40;
+              r = rivet ? 255 : seam ? 100 : 180;
+              g = rivet ? 150 : seam ? 52 : 92;
+              b = rivet ? 90 : seam ? 24 : 40;
             } else if (id === 1) {
               // Slate brick, every other course offset by half a brick.
               const course = (y / 8) | 0;

@@ -360,6 +360,14 @@
   gap: var(--space-3);
 }
 
+/* GitHub and YouTube are in the contact list anyway; on a phone they only
+   push the first project another row further down. */
+@media (max-width: 46rem) {
+  .hero__actions .btn--aside {
+    display: none;
+  }
+}
+
 /* Six entries land as 3 + 3 on a desktop and 2 + 2 + 2 on a tablet — at 11rem
    the sixth came out orphaned on a row of its own. The 19rem is measured
    against the 62rem cap plus two gaps, not picked for the look of it. */
@@ -424,9 +432,12 @@
   font-weight: 600;
 }
 
+/* The fallback matters: a visitor with an older tokens.css still cached would
+   otherwise get a transparent button, since a var() with no value resets the
+   whole declaration. */
 .btn--primary:hover {
-  background: #ffb75a;
-  border-color: #ffb75a;
+  background: var(--accent-bright, var(--accent));
+  border-color: var(--accent-bright, var(--accent));
   color: var(--bg);
 }
 
@@ -475,6 +486,24 @@
     grid-template-columns: 1fr;
     gap: var(--space-6);
   }
+}
+
+.section__head .clients {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-3);
+  margin-top: var(--space-5);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  color: var(--text);
+}
+
+.clients__label {
+  font-size: var(--step--2);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
 }
 
 /* ---------- Topic filter ---------- */
@@ -644,6 +673,20 @@
   transform: scale(1.03);
 }
 
+/* The still stays underneath as the poster. A paused <video> would show its
+   first frame instead, and preload="none" would show nothing at all. */
+.work-card__clip {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.35s var(--ease);
+  pointer-events: none;
+}
+
+.work-card__clip.is-playing {
+  opacity: 1;
+}
+
 .work-card__year {
   position: absolute;
   top: var(--space-3);
@@ -725,10 +768,10 @@
   color: var(--accent);
 }
 
-.tag--cyan {
-  border-color: rgba(92, 210, 230, 0.28);
-  background: var(--cyan-soft);
-  color: var(--cyan);
+.tag--client {
+  border-color: var(--client-line, rgba(139, 150, 255, 0.28));
+  background: var(--client-soft);
+  color: var(--client);
 }
 
 .work-card__foot {
@@ -879,6 +922,72 @@
   display: none;
 }
 
+/* ---------- Dialog player ---------- */
+
+/* On a wide screen the facade opens the player here instead of inside its own
+   350 px card. The close button hangs off the corner, outside the frame. */
+.player {
+  width: min(92vw, 1200px);
+  max-width: none;
+  margin: auto;
+  padding: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--bg-sunken);
+  box-shadow: var(--shadow-lift);
+  overflow: visible;
+}
+
+.player::backdrop {
+  background: rgba(8, 8, 10, 0.88);
+  backdrop-filter: blur(8px);
+}
+
+.player__frame {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: inherit;
+  background: #000;
+  overflow: hidden;
+}
+
+.player__frame iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.dialog-close {
+  position: absolute;
+  top: -1.25rem;
+  right: -1.25rem;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  background: var(--bg-raised);
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.15s var(--ease), color 0.15s var(--ease);
+}
+
+.dialog-close:hover {
+  border-color: var(--accent-line);
+  color: var(--accent);
+}
+
+.dialog-close svg {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
 /* ---------- Contact ---------- */
 
 .contact {
@@ -908,11 +1017,15 @@
   align-items: flex-start;
 }
 
-/* The heading sits straight above the button with no paragraph between them,
-   so it needs the wider gap. */
 .contact h2 {
   font-size: var(--step-3);
+  margin-bottom: var(--space-3);
+}
+
+.contact__note {
+  max-width: 40ch;
   margin-bottom: var(--space-5);
+  color: var(--text-muted);
 }
 
 .link-list {

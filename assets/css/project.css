@@ -291,3 +291,328 @@
   text-align: right;
   margin-left: auto;
 }
+
+/* ---------- Before/after slider ---------- */
+
+.compare__stage {
+  --pos: 50%;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-sunken);
+}
+
+.compare__stage img {
+  width: 100%;
+  border: 0;
+  border-radius: 0;
+}
+
+.compare__over {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  object-fit: cover;
+  clip-path: inset(0 calc(100% - var(--pos)) 0 0);
+}
+
+.compare__handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--pos);
+  width: 2px;
+  background: var(--accent);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.compare__handle::before,
+.compare__handle::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  translate: -50% -50%;
+  border-radius: 50%;
+}
+
+.compare__handle::before {
+  border: 1px solid var(--accent);
+  background: var(--bg-overlay);
+  backdrop-filter: blur(4px);
+}
+
+/* The chevrons are a mask, so they take the accent token like everything else. */
+.compare__handle::after {
+  background: var(--accent);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 7l-5 5 5 5M15 7l5 5-5 5'/%3E%3C/svg%3E")
+    center / 1.25rem no-repeat;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 7l-5 5 5 5M15 7l5 5-5 5'/%3E%3C/svg%3E")
+    center / 1.25rem no-repeat;
+}
+
+.compare__label {
+  position: absolute;
+  top: var(--space-3);
+  padding: 0.15rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-overlay);
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.compare__label--left {
+  left: var(--space-3);
+}
+
+.compare__label--right {
+  right: var(--space-3);
+}
+
+/* The range input is the whole stage: invisible, but it is what the pointer
+   drags and the keyboard moves. The focus ring goes on the stage instead. */
+.compare__control {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+}
+
+.compare__control input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: ew-resize;
+}
+
+.compare__stage:has(input:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ---------- Live raycaster ---------- */
+
+/* Two columns at every width: the view has to be visible while the map is
+   dragged, and a half-width map takes less of the page away from scrolling. */
+.raycaster {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+@media (max-width: 40rem) {
+  .raycaster {
+    gap: var(--space-2);
+  }
+}
+
+.raycaster canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-sunken);
+}
+
+/* The map is dragged on, so the browser must not turn the drag into a scroll. */
+.raycaster__map {
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.raycaster__map:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.raycaster__view {
+  image-rendering: pixelated;
+}
+
+.raycaster__foot {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  line-height: 1.5;
+  color: var(--text-faint);
+}
+
+/* ---------- Morse demo ---------- */
+
+.morse__form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.morse__input {
+  flex: 1 1 12rem;
+  min-width: 0;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--bg-sunken);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--step-0);
+  text-transform: uppercase;
+}
+
+.morse__input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.morse__screen {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  justify-items: center;
+  align-content: start;
+  gap: var(--space-2);
+  min-height: 12rem;
+  margin-top: var(--space-4);
+  padding: var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-sunken);
+  font-family: var(--font-mono);
+}
+
+.morse__screen output {
+  display: block;
+}
+
+.morse__idle {
+  grid-row: 1 / -1;
+  align-self: center;
+  margin: 0;
+  text-align: center;
+  font-size: var(--step-1);
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+}
+
+.morse__idle span {
+  display: block;
+  margin-top: var(--space-2);
+  font-size: var(--step--2);
+  letter-spacing: 0.06em;
+}
+
+.morse[data-state] .morse__idle {
+  display: none;
+}
+
+.morse__key {
+  position: absolute;
+  top: var(--space-4);
+  left: var(--space-4);
+  width: 1rem;
+  height: 1rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  background: var(--bg-raised);
+  transition: background-color 0.04s linear, box-shadow 0.04s linear, transform 0.04s linear;
+}
+
+.morse__key.is-down {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 16px var(--accent-line);
+  transform: scale(0.85);
+}
+
+.morse__letter {
+  min-height: 1em;
+  font-size: var(--step-4);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--text);
+}
+
+.morse__code {
+  min-height: 1.4em;
+  font-size: var(--step-1);
+  letter-spacing: 0.3em;
+  color: var(--accent);
+}
+
+.morse__sentence {
+  align-self: end;
+  min-height: 1.4em;
+  letter-spacing: 0.15em;
+  text-align: center;
+  overflow-wrap: anywhere;
+  color: var(--text-muted);
+}
+
+/* ---------- Lightbox ---------- */
+
+.figure__zoom {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+
+.figure__zoom:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.lightbox {
+  max-width: min(96vw, 1400px);
+  max-height: 96vh;
+  margin: auto;
+  padding: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--bg-raised);
+  color: var(--text);
+  box-shadow: var(--shadow-lift);
+  overflow: visible;
+}
+
+.lightbox::backdrop {
+  background: rgba(8, 8, 10, 0.88);
+  backdrop-filter: blur(8px);
+}
+
+.lightbox img {
+  display: block;
+  max-width: 96vw;
+  max-height: calc(96vh - 3.5rem);
+  width: auto;
+  height: auto;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.lightbox__caption {
+  padding: var(--space-3) var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.lightbox__caption:empty {
+  display: none;
+}

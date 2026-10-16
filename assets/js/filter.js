@@ -4,6 +4,10 @@
  * The chips are built here rather than written into the markup, so the counts
  * cannot drift from the cards and a visitor without JavaScript simply gets the
  * full grid instead of controls that do nothing.
+ *
+ * The chosen chip goes into the query string (`?studio=AR`), so a filtered view
+ * is a link that can be sent. The fragment is left alone: it carries the reel
+ * key and the section anchors.
  */
 const FADE_MS = 220;
 
@@ -26,6 +30,7 @@ function buildBar(bar) {
   if (cards.length === 0) return;
 
   const label = bar.dataset.filterLabel || "projects";
+  const paramKey = (bar.dataset.filter || "").replace(/^#/, "").replace(/-grid$/, "");
   const topics = readTopics(bar).filter((topic) =>
     cards.some((card) => readTopics(card).includes(topic)),
   );
@@ -57,7 +62,15 @@ function buildBar(bar) {
     return { chip, topic, matching };
   });
 
-  function apply(selected) {
+  function apply(selected, { remember = true } = {}) {
+    if (remember) {
+      const params = new URLSearchParams(location.search);
+      if (selected === null) params.delete(paramKey);
+      else params.set(paramKey, selected);
+      const query = params.toString();
+      history.replaceState(null, "", `${location.pathname}${query ? `?${query}` : ""}${location.hash}`);
+    }
+
     for (const { chip, topic, matching } of chips) {
       const active = topic === selected;
       chip.setAttribute("aria-pressed", String(active));
@@ -88,6 +101,12 @@ function buildBar(bar) {
 
   bar.append(status);
   bar.dataset.ready = "";
+
+  // A chip named in the URL is pressed on arrival. The URL already says so,
+  // which is why this one is not written back.
+  const wanted = new URLSearchParams(location.search).get(paramKey);
+  const preset = chips.find(({ topic }) => topic !== null && topic === wanted);
+  if (preset) apply(preset.topic, { remember: false });
 }
 
 function buildAll() {
@@ -112,5 +131,9 @@ buildAll();
 // counts are rebuilt from whatever the grid holds at that moment.
 document.addEventListener("cards:changed", buildAll);
 
-// The brand in the navigation puts the page back to its loaded state.
-document.addEventListener("filters:reset", buildAll);
+// The brand in the navigation puts the page back to its loaded state. The
+// query is dropped first, or the rebuild would press the chips straight back.
+document.addEventListener("filters:reset", () => {
+  history.replaceState(null, "", location.pathname + location.hash);
+  buildAll();
+});
